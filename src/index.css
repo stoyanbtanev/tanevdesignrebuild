@@ -354,7 +354,7 @@
    HERO
 ═══════════════════════════════════════════ */
 .hero {
-  position: relative; height: 100dvh; overflow: hidden; display: flex;
+  position: relative; height: 100svh; height: var(--app-height, 100svh); overflow: hidden; display: flex;
   align-items: center; justify-content: center; text-align: center;
 }
 .hero__floating {
@@ -456,7 +456,7 @@
    MISSION
 ═══════════════════════════════════════════ */
 .mission {
-  padding: 180px 40px; min-height: 100dvh;
+  padding: 180px 40px; min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
   position: relative; overflow: hidden;
 }
@@ -528,7 +528,7 @@
   background: #0d0d0d; color: var(--td-fg); position: relative;
 }
 .hz-wrapper {
-  position: relative; height: 100dvh; overflow: hidden; display: flex; align-items: center;
+  position: relative; height: 100svh; overflow: hidden; display: flex; align-items: center;
 }
 .hz-container {
   display: flex; height: 100%; width: max-content; will-change: transform;
@@ -1078,7 +1078,7 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   pointer-events: none;
 }
 .cta-pin-layer {
-  position: relative; height: 100dvh; display: flex; align-items: center; justify-content: center; z-index: 10;
+  position: relative; height: 100svh; display: flex; align-items: center; justify-content: center; z-index: 10;
 }
 .cta-huge-text {
   font-family: 'Clash Display', sans-serif; font-size: clamp(72px, 14vw, 240px); text-transform: uppercase;
