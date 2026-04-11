@@ -865,7 +865,16 @@ function ContactFooter() {
   return (
     <div className="cta-container" id="contact">
       <div className="cta-pin-layer">
-        <div className="cta-huge-text"><T en="ACT." bg="ДЕЙСТВАЙ." /></div>
+        <div
+          className="cta-huge-text"
+          aria-label={lang === 'bg' ? 'ГОТОВ ЛИ СИ.' : 'READY.'}
+        >
+          {(lang === 'bg' ? 'ГОТОВ ЛИ СИ.' : 'READY.').split('').map((char, i) => (
+            <span key={i} className="cta-char">
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+          ))}
+        </div>
       </div>
       <div className="footer-reveal">
         {/* Portfolio */}
@@ -1075,11 +1084,49 @@ export default function Index() {
       });
     });
 
-    // CTA pinned text
-    gsap.to('.cta-huge-text', {
-      scale: 10, opacity: 0, ease: 'power2.in',
-      scrollTrigger: { trigger: '.cta-pin-layer', pin: true, start: 'top top', end: '+=150%', scrub: 1 }
+    // ── CTA Assembly Animation ────────────────────────────────────────────────
+    const isMobileCtaCheck = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
+
+    const ctaTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.cta-pin-layer',
+        pin: true,
+        start: 'top top',
+        end: '+=220%',
+        scrub: isMobileCtaCheck ? 1.5 : 1,
+      }
     });
+
+    // Phase 1 (progress 0 → 0.5): chars fly in from alternating above/below
+    gsap.set('.cta-char', {
+      y: (i: number) => i % 2 === 0 ? -120 : 120,
+      opacity: 0
+    });
+
+    ctaTl.to('.cta-char', {
+      y: 0,
+      opacity: 1,
+      stagger: 0.04,
+      ease: 'power3.out',
+      duration: 0.5,
+    }, 0);
+
+    // Phase 1 simultaneous: letter-spacing expands as chars land
+    ctaTl.fromTo('.cta-huge-text',
+      { letterSpacing: '-0.12em' },
+      { letterSpacing: '0.04em', ease: 'power2.out', duration: 0.5 },
+      0
+    );
+
+    // Phase 2 (progress 0.6 → 1): exit — chars scatter outward from center
+    ctaTl.to('.cta-char', {
+      y: (i: number) => i % 2 === 0 ? -200 : 200,
+      opacity: 0,
+      stagger: { each: 0.03, from: 'center' },
+      ease: 'power2.in',
+      duration: 0.4,
+    }, 0.6);
 
     // Stats countUp
     document.querySelectorAll('.stats-bar__number').forEach((el: any) => {

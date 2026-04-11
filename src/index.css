@@ -356,6 +356,7 @@
 .hero {
   position: relative; height: 100svh; height: var(--app-height, 100svh); overflow: hidden; display: flex;
   align-items: center; justify-content: center; text-align: center;
+  clip-path: inset(0);
 }
 .hero__floating {
   position: absolute;
@@ -1079,12 +1080,19 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
 }
 .cta-pin-layer {
   position: relative; height: 100svh; display: flex; align-items: center; justify-content: center; z-index: 10;
+  overflow: hidden;
+  clip-path: inset(0);
 }
 .cta-huge-text {
   font-family: 'Clash Display', sans-serif; font-size: clamp(72px, 14vw, 240px); text-transform: uppercase;
   line-height: 0.9; text-align: center; transform-origin: center center; will-change: transform, opacity;
   color: transparent; -webkit-text-stroke: 1.5px rgba(245,243,239,0.7);
   letter-spacing: -0.02em;
+  will-change: letter-spacing, opacity;
+}
+.cta-char {
+  will-change: transform, opacity;
+  display: inline-block;
 }
 .footer-reveal {
   position: relative; z-index: 20; padding: 100px 40px 60px;
@@ -1267,7 +1275,11 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   .nav__hamburger { display: block; }
   .universe { columns: 1; }
 
-  .hero__headline { font-size: clamp(38px, 12vw, 72px); }
+  .hero__headline {
+    font-size: clamp(40px, 13.5vw, 68px);
+    letter-spacing: -0.025em;
+    line-height: 0.92;
+  }
   .mission { padding: 120px 20px; min-height: auto; }
 
   .horizontal-services { height: auto !important; }
@@ -1281,4 +1293,10 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   .style-picker { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
   .contact-form { padding: 0 10px; }
   .footer-work__links { gap: 16px; }
+}
+
+@media (max-width: 390px) {
+  .hero__headline {
+    font-size: clamp(34px, 12.5vw, 48px);
+  }
 }
