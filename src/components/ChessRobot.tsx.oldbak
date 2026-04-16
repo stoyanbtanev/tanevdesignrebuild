@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Settings2, X } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   MOODS,
@@ -8,12 +9,11 @@ import {
 } from '@/data/chessQuips';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   TANEV-01 — Chess Commentator Robot  (FLOATING EDITION)
-   ─ Sits on top of the board on every device and spectates
-   ─ Pops speech-bubble quotes that drift, type, and vanish
-   ─ Cursor-reactive head + eyes
-   ─ Custom modular "control tower" button replaces the old gear icon
-   ─ Theme-aware (dark & light)
+   TANEV-01 — Chess Commentator Robot  (LEGEND EDITION)
+   ─ Watches the board, tilts its head toward your cursor
+   ─ Five selectable moods with their own color palette & font
+   ─ Spice level 0-3, typing speed, shake toggle, cursor-tracking toggle
+   ─ All settings persist to localStorage
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export type ChessRobotEventType =
@@ -38,8 +38,6 @@ export interface ChessRobotEvent {
 
 interface ChessRobotProps {
   event: ChessRobotEvent | null;
-  /** 'floating' mounts the robot as an overlay on top of its parent board. */
-  variant?: 'standard' | 'floating';
 }
 
 type Spice = 0 | 1 | 2 | 3;
@@ -74,9 +72,8 @@ const SPEED_MAP: Record<Exclude<SpeedPref, 'auto'>, number> = {
 };
 
 const IDLE_INTERVAL_MS = 17000;
-const BUBBLE_VISIBLE_MS = 6000;    // auto-dismiss after this long (idle, move)
-const BUBBLE_VISIBLE_MS_BIG = 8000; // longer for big events
 
+/* ─── Map an event to a category key used by the quip bank ───────────── */
 function eventToCategory(evt: ChessRobotEvent): CategoryId {
   switch (evt.type) {
     case 'newGame':    return 'newGame';
@@ -94,7 +91,7 @@ function eventToCategory(evt: ChessRobotEvent): CategoryId {
   }
 }
 
-/* ─── Robot portrait ──────────────────────────────────────────────────── */
+/* ─── Robot SVG portrait (matte-black, tanev silhouette) ──────────────── */
 function RobotPortrait({
   alert,
   headRx,
@@ -132,9 +129,11 @@ function RobotPortrait({
         </radialGradient>
       </defs>
 
+      {/* Ground shadow */}
       <ellipse cx="120" cy="268" rx="78" ry="5" fill="#000" opacity="0.55" />
       <ellipse cx="120" cy="268" rx="50" ry="3" fill="#000" opacity="0.85" />
 
+      {/* Torso */}
       <g>
         <path d="M 78 200 Q 76 225, 92 240 L 148 240 Q 164 225, 162 200 Z" fill="url(#robot-body-grad)" />
         <path
@@ -150,6 +149,7 @@ function RobotPortrait({
         <rect x="108" y="90" width="24" height="4" fill="#1a1a1a" />
       </g>
 
+      {/* Head group — rotates toward cursor */}
       <g
         className="robot-head"
         style={{
@@ -170,6 +170,7 @@ function RobotPortrait({
           fill="none"
           opacity="0.6"
         />
+        {/* Visor */}
         <path
           d="M 84 50 Q 84 42, 96 40 L 144 40 Q 156 42, 156 50 L 156 70 Q 156 76, 150 78 L 90 78 Q 84 76, 84 70 Z"
           fill="url(#robot-visor-grad)"
@@ -184,9 +185,11 @@ function RobotPortrait({
           opacity="0.45"
           strokeLinecap="round"
         />
+        {/* Side pods */}
         <rect x="68" y="56" width="6" height="18" rx="2" fill="#050505" />
         <rect x="166" y="56" width="6" height="18" rx="2" fill="#050505" />
 
+        {/* Eyes — translate toward cursor within the visor */}
         <g
           style={{
             transform: `translate(${eyeTx}px, ${eyeTy}px)`,
@@ -200,6 +203,7 @@ function RobotPortrait({
         </g>
       </g>
 
+      {/* Chest heartbeat */}
       <g>
         <circle cx="120" cy="158" r="6" fill="#0a0a0a" stroke="#141414" strokeWidth="0.5" />
         <circle cx="120" cy="158" r="2.2" fill="var(--robot-accent, #E8241A)" className="robot-chest-led" />
@@ -210,36 +214,11 @@ function RobotPortrait({
   );
 }
 
-/* ─── Animated "CONTROL TOWER" button — replaces the gear icon ─────────
-   Three vertical bars that animate like an equaliser. Stops on hover
-   into a perfect hexagonal "ON AIR" pod. Feels like studio gear. */
-function ControlTowerGlyph({ open }: { open: boolean }) {
-  if (open) {
-    return (
-      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden>
-        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden>
-      <g className="tower-bar tower-bar--1">
-        <rect x="4"  y="8"  width="3.4" height="8"  rx="1.4" fill="currentColor" />
-      </g>
-      <g className="tower-bar tower-bar--2">
-        <rect x="10.3" y="5"  width="3.4" height="14" rx="1.4" fill="currentColor" />
-      </g>
-      <g className="tower-bar tower-bar--3">
-        <rect x="16.6" y="10" width="3.4" height="4"  rx="1.4" fill="currentColor" />
-      </g>
-    </svg>
-  );
-}
-
 /* ─── Main component ─────────────────────────────────────────────────── */
-export default function ChessRobot({ event, variant = 'standard' }: ChessRobotProps) {
+export default function ChessRobot({ event }: ChessRobotProps) {
   const { lang } = useLanguage();
 
+  // Persisted preferences
   const [mood, setMood] = useState<MoodId>(() => readStored(STORAGE_KEYS.mood, 'gentleman' as MoodId, (s) => {
     return (['gentleman','trash','philosopher','chaos','silent'].includes(s) ? s : 'gentleman') as MoodId;
   }));
@@ -253,30 +232,31 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
   const [trackCursor, setTrackCursor] = useState<boolean>(() => readStored(STORAGE_KEYS.track, true, (s) => s === '1'));
   const [shakeOn, setShakeOn] = useState<boolean>(() => readStored(STORAGE_KEYS.shake, true, (s) => s === '1'));
 
+  // UI state
   const [panelOpen, setPanelOpen] = useState(false);
 
+  // Quip + typewriter state
   const [quip, setQuip] = useState<{ text: string; id: string } | null>(null);
   const [typed, setTyped] = useState('');
   const [alert, setAlert] = useState(false);
-  const [bubbleVisible, setBubbleVisible] = useState(false);
 
+  // Cursor-tracking state (the SVG head rotates / eyes translate)
   const [headRx, setHeadRx] = useState(0);
   const [headRy, setHeadRy] = useState(0);
   const [eyeTx, setEyeTx] = useState(0);
   const [eyeTy, setEyeTy] = useState(0);
 
+  // Refs
   const rootRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const lastIdRef = useRef<string | null>(null);
   const idleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const alertTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const bubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const typeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const rafRef = useRef<number | null>(null);
   const pendingMouseRef = useRef<{ x: number; y: number } | null>(null);
 
   const moodDef = MOODS[mood];
-  const isFloating = variant === 'floating';
 
   const highImpact = useMemo(() => {
     if (!event) return false;
@@ -288,21 +268,19 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
     return SPEED_MAP[speedPref];
   }, [speedPref, moodDef.typeSpeed]);
 
+  /* ─── Persist preferences ───────────────────────────────────────────── */
   useEffect(() => { writeStored(STORAGE_KEYS.mood, mood); }, [mood]);
   useEffect(() => { writeStored(STORAGE_KEYS.spice, String(spice)); }, [spice]);
   useEffect(() => { writeStored(STORAGE_KEYS.speed, speedPref); }, [speedPref]);
   useEffect(() => { writeStored(STORAGE_KEYS.track, trackCursor ? '1' : '0'); }, [trackCursor]);
   useEffect(() => { writeStored(STORAGE_KEYS.shake, shakeOn ? '1' : '0'); }, [shakeOn]);
 
-  const showBubbleWithAutoDismiss = useCallback((ms: number) => {
-    setBubbleVisible(true);
-    if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current);
-    bubbleTimerRef.current = setTimeout(() => setBubbleVisible(false), ms);
-  }, []);
-
+  /* ─── Pick a quip on each new event ─────────────────────────────────── */
   useEffect(() => {
     if (!event) return;
+    // ordinary moves: mood-dependent response rate
     if (event.type === 'move' && Math.random() > moodDef.responseRate) return;
+    // silent monk: even for big events, occasionally stay quiet (but never for mate/draw)
     if (
       mood === 'silent' &&
       event.type !== 'checkmate' &&
@@ -316,7 +294,6 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
     if (!picked) return;
     lastIdRef.current = picked.id;
     setQuip(picked);
-    showBubbleWithAutoDismiss(highImpact ? BUBBLE_VISIBLE_MS_BIG : BUBBLE_VISIBLE_MS);
 
     if (highImpact && shakeOn) {
       setAlert(true);
@@ -328,6 +305,7 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event]);
 
+  /* ─── Re-translate the current quip when language flips ─────────────── */
   useEffect(() => {
     if (!quip) return;
     const parts = quip.id.split(':');
@@ -338,8 +316,11 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
       category: cat as CategoryId,
       lang,
       spice,
+      // force the same quip by pretending all others were last
       lastId: null,
     });
+    // Simpler approach: just switch to first-available in same mood+category.
+    // If we can't, keep what we have.
     if (repicked && repicked.id.startsWith(`${m}:${cat}:`) && repicked.id.endsWith(`:${idxStr}`)) {
       setQuip(repicked);
     } else if (repicked) {
@@ -348,6 +329,7 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
+  /* ─── Idle rotation — resets whenever event changes ─────────────────── */
   useEffect(() => {
     if (idleTimerRef.current) clearInterval(idleTimerRef.current);
     idleTimerRef.current = setInterval(() => {
@@ -355,21 +337,21 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
       if (!picked) return;
       lastIdRef.current = picked.id;
       setQuip(picked);
-      showBubbleWithAutoDismiss(BUBBLE_VISIBLE_MS);
     }, IDLE_INTERVAL_MS);
     return () => { if (idleTimerRef.current) clearInterval(idleTimerRef.current); };
-  }, [event, lang, mood, spice, showBubbleWithAutoDismiss]);
+  }, [event, lang, mood, spice]);
 
+  /* ─── Re-pick when the mood changes (so the robot introduces himself) ─ */
   useEffect(() => {
     const picked = pickQuip({ mood, category: 'newGame', lang, spice, lastId: null });
     if (picked) {
       lastIdRef.current = picked.id;
       setQuip(picked);
-      showBubbleWithAutoDismiss(BUBBLE_VISIBLE_MS);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mood]);
 
+  /* ─── Typewriter animation ──────────────────────────────────────────── */
   useEffect(() => {
     if (!quip) return;
     if (typeTimerRef.current) clearInterval(typeTimerRef.current);
@@ -389,11 +371,13 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
     return () => { if (typeTimerRef.current) clearInterval(typeTimerRef.current); };
   }, [quip, effectiveTypeSpeed]);
 
+  /* ─── Cursor tracking ─────────────────────────────────────────────── */
   useEffect(() => {
     if (!trackCursor) {
       setHeadRx(0); setHeadRy(0); setEyeTx(0); setEyeTy(0);
       return;
     }
+    // Respect reduced-motion preference
     const reduce = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return;
 
@@ -409,41 +393,34 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
         const r = el.getBoundingClientRect();
         const cx = r.left + r.width / 2;
         const cy = r.top + r.height / 2;
-        // Widen the tracking field so the robot notices the cursor anywhere
-        // on a reasonably-sized viewport, not only over the frame.
-        const refW = Math.max(r.width * 3, 480);
-        const refH = Math.max(r.height * 3, 540);
-        const dx = Math.max(-1, Math.min(1, (pm.x - cx) / refW));
-        const dy = Math.max(-1, Math.min(1, (pm.y - cy) / refH));
-        setHeadRy(dx * 14);
-        setHeadRx(-dy * 8);
-        setEyeTx(dx * 4);
-        setEyeTy(dy * 3);
+        // Normalise cursor offset from center, clamp -1..1
+        const dx = Math.max(-1, Math.min(1, (pm.x - cx) / (r.width * 1.5)));
+        const dy = Math.max(-1, Math.min(1, (pm.y - cy) / (r.height * 1.5)));
+        // Head: subtle tilt — max ±10deg on Y (horizontal), ±6deg on X (vertical)
+        setHeadRy(dx * 10);
+        setHeadRx(-dy * 6);
+        // Eyes: max ±3px translate for the "he is watching" effect
+        setEyeTx(dx * 3);
+        setEyeTy(dy * 2.5);
       });
     };
-    const onTouch = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (!t) return;
-      onMove({ clientX: t.clientX, clientY: t.clientY } as MouseEvent);
-    };
     window.addEventListener('mousemove', onMove, { passive: true });
-    window.addEventListener('touchmove', onTouch, { passive: true });
     return () => {
       window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('touchmove', onTouch);
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     };
   }, [trackCursor]);
 
+  /* ─── Cleanup ───────────────────────────────────────────────────── */
   useEffect(() => () => {
     if (idleTimerRef.current) clearInterval(idleTimerRef.current);
     if (alertTimerRef.current) clearTimeout(alertTimerRef.current);
-    if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current);
     if (typeTimerRef.current) clearInterval(typeTimerRef.current);
     if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
   }, []);
 
+  /* ─── Close panel on ESC + outside-tap ───────────────────────────── */
   useEffect(() => {
     if (!panelOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setPanelOpen(false); };
@@ -476,7 +453,7 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
 
   const moodList: MoodId[] = ['gentleman', 'trash', 'philosopher', 'chaos', 'silent'];
   const spiceLabels = [
-    { n: 0, en: 'Safe',     bg: 'Чисто' },
+    { n: 0, en: 'Safe',    bg: 'Чисто' },
     { n: 1, en: 'Sprinkle', bg: 'Леко' },
     { n: 2, en: 'Spicy',    bg: 'Люто' },
     { n: 3, en: 'Savage',   bg: 'Жестоко' },
@@ -492,51 +469,25 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
   return (
     <div
       ref={rootRef}
-      className={[
-        'chess-robot',
-        `chess-robot--mood-${mood}`,
-        alert ? 'chess-robot--alert' : '',
-        panelOpen ? 'chess-robot--panel-open' : '',
-        isFloating ? 'chess-robot--floating' : '',
-      ].filter(Boolean).join(' ')}
+      className={`chess-robot chess-robot--mood-${mood}${alert ? ' chess-robot--alert' : ''}${panelOpen ? ' chess-robot--panel-open' : ''}`}
       style={rootStyle}
       aria-live="polite"
     >
-      {/* Comic-strip speech bubble — renders above the robot and auto-dismisses */}
-      {isFloating && (
-        <div
-          className={`chess-robot__popup${bubbleVisible && typed ? ' is-visible' : ''}`}
-          role="status"
-          aria-hidden={!bubbleVisible}
-        >
-          <p className="chess-robot__popup-text">
-            {typed}
-            {typed.length < (quip?.text.length ?? 0) && (
-              <span className="chess-robot__cursor" aria-hidden>_</span>
-            )}
-          </p>
-          <span className="chess-robot__popup-tail" aria-hidden />
-        </div>
-      )}
-
       <div className="chess-robot__frame" ref={frameRef}>
         <span className="chess-robot__corner chess-robot__corner--tl" aria-hidden />
         <span className="chess-robot__corner chess-robot__corner--tr" aria-hidden />
         <span className="chess-robot__corner chess-robot__corner--bl" aria-hidden />
         <span className="chess-robot__corner chess-robot__corner--br" aria-hidden />
 
+        {/* Gear button — opens the customization panel */}
         <button
           type="button"
-          className="chess-robot__tower"
-          aria-label={lang === 'bg' ? 'Настройки на коментатора' : 'Commentator controls'}
+          className="chess-robot__gear"
+          aria-label={lang === 'bg' ? 'Настройки на коментатора' : 'Commentator settings'}
           aria-expanded={panelOpen}
           onClick={() => setPanelOpen((v) => !v)}
         >
-          <span className="chess-robot__tower-core">
-            <ControlTowerGlyph open={panelOpen} />
-          </span>
-          <span className="chess-robot__tower-ring" aria-hidden />
-          <span className="chess-robot__tower-pulse" aria-hidden />
+          {panelOpen ? <X size={14} strokeWidth={2} /> : <Settings2 size={14} strokeWidth={2} />}
         </button>
 
         <div className="chess-robot__screen">
@@ -551,6 +502,7 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
           </span>
         </div>
 
+        {/* Customization panel */}
         {panelOpen && (
           <div
             className="chess-robot__panel"
@@ -655,18 +607,15 @@ export default function ChessRobot({ event, variant = 'standard' }: ChessRobotPr
         )}
       </div>
 
-      {/* Standard (non-floating) bubble — keeps legacy layout alive */}
-      {!isFloating && (
-        <div className="chess-robot__bubble" role="status">
-          <span className="chess-robot__bubble-caret" aria-hidden>›</span>
-          <p className="chess-robot__bubble-text">
-            {typed}
-            {typed.length < (quip?.text.length ?? 0) && (
-              <span className="chess-robot__cursor" aria-hidden>_</span>
-            )}
-          </p>
-        </div>
-      )}
+      <div className="chess-robot__bubble" role="status">
+        <span className="chess-robot__bubble-caret" aria-hidden>›</span>
+        <p className="chess-robot__bubble-text">
+          {typed}
+          {typed.length < (quip?.text.length ?? 0) && (
+            <span className="chess-robot__cursor" aria-hidden>_</span>
+          )}
+        </p>
+      </div>
     </div>
   );
 }
