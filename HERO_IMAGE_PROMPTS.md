@@ -69,6 +69,42 @@ Hand-carved stone chess set mid-game on a weathered oak table in a medieval libr
 
 ---
 
+## Alternate set — Balkan winter nature (swap-in prompts)
+
+Five extra prompts built for the same 8-image parallax slot, this time leaning into the Bulgarian/Balkan mountain aesthetic: Rila, Pirin, Rhodope, Stara Planina. Same global style directive applies (cinematic, 35mm, 4:5, no humans, no text, no logos). These work as drop-in replacements or as a complete alternate set.
+
+## 9 — Rhodope pine ridge at blue hour
+
+```
+Vast silent ridge of snow-covered Rhodope pines receding into blue-hour fog, last warm sliver of sun (#E8241A ember) bleeding through a single gap in the ridge, layered mountain silhouettes fading to deep slate, film grain, very low saturation, slightly out-of-focus foreground branch, Balkan winter, no buildings, no paths, no people, editorial landscape photography, Portra 800 grain, vast negative space on top two thirds for the headline to sit over.
+```
+
+## 10 — Stone shepherd's hut, single ember window
+
+```
+Abandoned Balkan mountain shepherd's hut in deep snow at dusk, rough dry-stone walls half-buried, a single tiny window glowing ember red (#E8241A) from an unseen fire inside, a lone trail of boot prints leading out of frame, bare black beech trees in the middle distance, cinestill 800T palette, very cold blue shadows against the single warm window, absolutely no human in frame, Andrei Tarkovsky winter mood.
+```
+
+## 11 — Frozen beech forest, backlit mist
+
+```
+Dense stand of bare Balkan beech trees in heavy morning mist, thin pillars of warm sunrise light cutting diagonally through the fog (#E8241A ember through frost), fresh undisturbed snow on the forest floor, a single fallen branch in the foreground with hoarfrost crystals in macro focus, rest of the frame softly defocused, deep blacks where the mist thins, tonal range: charcoal, slate, cream, one warm accent beam. No animals, no paths, no people.
+```
+
+## 12 — Wolf tracks at twilight, Pirin basin
+
+```
+Long low-angle shot across a wind-sculpted Balkan snowfield at twilight, a single trail of fresh wolf tracks leading toward a distant treeline of frozen firs, Pirin peaks in the far background catching the very last stripe of ember sunset (#E8241A), cold desaturated cyan shadows in the snow, cinematic wide aspect crop held to 4:5, fine 35mm grain, vast empty sky two-thirds of the frame, no visible animal, no humans, no buildings, no text.
+```
+
+## 13 — Rila monastery stream at first light
+
+```
+A narrow black stream cutting through fresh untouched Rila mountain snow, edges of the water glazed with thin ice, a weathered wooden plank footbridge in the middle distance, a single old oil lantern hanging from its handrail glowing warm ember (#E8241A), towering snow-laden silver fir on either bank, morning alpine mist hanging low, Orthodox monastery-adjacent atmosphere without showing any building, reverent, quiet, editorial landscape, very cold palette pierced by one warm point of light. No people, no text.
+```
+
+---
+
 ## Generation tips
 
 - **Midjourney**: append `--ar 4:5 --style raw --stylize 250 --v 6` and remove the "cinematic, editorial..." block since raw + low stylize gives you that for free.

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#0A0A0A"/>
+  <text x="8" y="46" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="36" fill="#F5F3EF" letter-spacing="-1">T</text>
+  <text x="30" y="46" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="36" fill="#F5F3EF" letter-spacing="-1">D</text>
+  <rect x="28" y="10" width="2.5" height="44" rx="1.25" fill="#E8241A" transform="rotate(15 29 32)"/>
+</svg>

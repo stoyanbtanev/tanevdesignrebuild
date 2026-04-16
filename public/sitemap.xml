@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemaps-image/1.1">
   <url>
     <loc>https://www.tanev.design/</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tanev.design/" />
+    <xhtml:link rel="alternate" hreflang="bg" href="https://www.tanev.design/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.tanev.design/" />
+    <image:image>
+      <image:loc>https://www.tanev.design/og-image-v2.png</image:loc>
+      <image:title>tanev.design — Premium web design and development by Stoyan Tanev</image:title>
+      <image:caption>One person. Every detail considered.</image:caption>
+    </image:image>
   </url>
 </urlset>

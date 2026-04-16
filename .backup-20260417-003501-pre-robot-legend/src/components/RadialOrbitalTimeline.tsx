@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import {
   Zap, Box, Sparkles, Film, Search, RefreshCw,
-  ArrowRight, X,
+  ArrowRight,
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -112,13 +112,11 @@ export const SERVICE_NODES: OrbitalNode[] = [
 export default function RadialOrbitalTimeline() {
   const { lang } = useLanguage();
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [closing, setClosing] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [angle, setAngle] = useState(0);
   const [pulseId, setPulseId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-rotate loop
   useEffect(() => {
@@ -149,62 +147,19 @@ export default function RadialOrbitalTimeline() {
     return () => clearInterval(iv);
   }, [expanded]);
 
-  const closeExpanded = useCallback(() => {
-    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    setClosing(true);
-    setAutoRotate(true);
-    closeTimerRef.current = setTimeout(() => {
-      setExpanded(null);
-      setClosing(false);
-    }, 240);
-  }, []);
-
   const toggleNode = useCallback((id: string) => {
-    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     setExpanded((cur) => {
-      if (cur === id) {
-        // second tap on same node → animate close
-        setClosing(true);
-        setAutoRotate(true);
-        closeTimerRef.current = setTimeout(() => {
-          setExpanded(null);
-          setClosing(false);
-        }, 240);
-        return cur;
-      }
-      setClosing(false);
-      setAutoRotate(false);
-      return id;
+      const next = cur === id ? null : id;
+      setAutoRotate(next === null);
+      return next;
     });
   }, []);
 
-  useEffect(() => () => {
-    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-  }, []);
-
-  // ESC closes, any tap/click on the page outside the card closes on mobile too
-  useEffect(() => {
-    if (!expanded) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeExpanded();
-    };
-    const onDocDown = (e: MouseEvent | TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-      if (target.closest('.orbital__card') || target.closest('.orbital__node')) return;
-      closeExpanded();
-    };
-    document.addEventListener('keydown', onKey);
-    // capture-phase so we beat downstream handlers that might stop propagation
-    document.addEventListener('pointerdown', onDocDown as EventListener, true);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onDocDown as EventListener, true);
-    };
-  }, [expanded, closeExpanded]);
-
   const onBgClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) closeExpanded();
+    if (e.target === e.currentTarget) {
+      setExpanded(null);
+      setAutoRotate(true);
+    }
   };
 
   const radius = 220;
@@ -294,23 +249,9 @@ export default function RadialOrbitalTimeline() {
 
                 {isExpanded && (
                   <div
-                    className={`orbital__card ${flipCardUp ? 'orbital__card--up' : ''}${closing ? ' is-closing' : ''}`}
-                    role="dialog"
-                    aria-modal="false"
-                    aria-label={lang === 'bg' ? node.titleBg : node.titleEn}
+                    className={`orbital__card ${flipCardUp ? 'orbital__card--up' : ''}`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      type="button"
-                      className="orbital__card-close"
-                      aria-label={lang === 'bg' ? 'Затвори' : 'Close'}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        closeExpanded();
-                      }}
-                    >
-                      <X size={14} strokeWidth={2} />
-                    </button>
                     <div className="orbital__card-top">
                       <span className={`orbital__status orbital__status--${node.status.toLowerCase()}`}>
                         {node.status}

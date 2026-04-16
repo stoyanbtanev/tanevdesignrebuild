@@ -1083,12 +1083,8 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
 }
 .cta-container::before {
   content: ''; position: absolute; inset: 0; z-index: 1;
-  /* Procedural ember smoke: radial accent over fractal noise, zero binary assets */
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 55%, rgba(232, 36, 26, 0.35), transparent 70%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><filter id="s"><feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1   0 0 0 0 0.6   0 0 0 0 0.25   0 0 0 1 0"/></filter><rect width="100%25" height="100%25" filter="url(%23s)" opacity="0.85"/></svg>');
-  background-size: cover, 600px 600px; background-repeat: no-repeat, repeat;
-  opacity: 0.1; mix-blend-mode: screen;
+  background: url("/Ember Smoke Abstract.jpg") no-repeat center center;
+  background-size: cover; opacity: 0.08; mix-blend-mode: screen;
   -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
   mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
   pointer-events: none;
@@ -1546,37 +1542,22 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
 .chess-history__empty { opacity: 0.35; font-style: italic; padding: 4px 0; }
 
 /* ═══════════════════════════════════════════
-   CHESS ROBOT — TANEV-01 commentator (LEGEND EDITION)
-   ─ Mood-aware color theming via --robot-accent / --robot-halo / --robot-font
-   ─ Cursor-reactive head tilt + eye tracking
-   ─ Full customization panel (mood / spice / speed / toggles)
+   CHESS ROBOT — TANEV-01 commentator
 ═══════════════════════════════════════════ */
 .chess-robot {
-  /* Fallbacks — components set these inline per mood */
-  --robot-accent: #E8241A;
-  --robot-halo: rgba(232, 36, 26, 0.35);
-  --robot-font: 'Cormorant Garamond', 'Space Mono', serif;
-  --robot-eye-inner: #ff6a5e;
-  --robot-eye-outer: #3a0a06;
   display: flex;
   flex-direction: column;
   gap: 14px;
   width: 100%;
 }
 
-/* Per-mood eye gradient tuning (inner highlight + outer shadow) */
-.chess-robot--mood-gentleman   { --robot-eye-inner: #ff6a5e; --robot-eye-outer: #3a0a06; }
-.chess-robot--mood-trash       { --robot-eye-inner: #a5ffd6; --robot-eye-outer: #0c3b24; }
-.chess-robot--mood-philosopher { --robot-eye-inner: #d9c4ff; --robot-eye-outer: #2a1a4a; }
-.chess-robot--mood-chaos       { --robot-eye-inner: #ffb9e7; --robot-eye-outer: #4a0f36; }
-.chess-robot--mood-silent      { --robot-eye-inner: #d7f3ff; --robot-eye-outer: #1a3b4a; }
-
 /* The framed "broadcast screen" the robot sits in */
 .chess-robot__frame {
   position: relative;
   aspect-ratio: 1 / 1.05;
   width: 100%;
-  background: radial-gradient(ellipse at 50% 30%, #161616 0%, #0a0a0a 55%, #050505 100%);
+  background:
+    radial-gradient(ellipse at 50% 30%, #161616 0%, #0a0a0a 55%, #050505 100%);
   border: 1px solid rgba(245, 243, 239, 0.08);
   border-radius: 4px;
   overflow: hidden;
@@ -1584,73 +1565,36 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   flex-direction: column;
   align-items: stretch;
   box-shadow:
-    0 0 40px color-mix(in srgb, var(--robot-accent) 8%, transparent),
+    0 0 40px rgba(232, 36, 26, 0.04),
     0 18px 40px rgba(0, 0, 0, 0.55),
     inset 0 0 0 1px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  transition: box-shadow 0.4s ease;
 }
-/* Ambient accent backglow */
 .chess-robot__frame::before {
+  /* Ambient red backglow to connect with chess board vignette */
   content: '';
   position: absolute;
   inset: -30%;
-  background: radial-gradient(ellipse at 50% 55%, var(--robot-halo), transparent 55%);
-  opacity: 0.25;
+  background: radial-gradient(ellipse at 50% 55%, rgba(232, 36, 26, 0.08), transparent 55%);
   pointer-events: none;
   z-index: 0;
-  transition: opacity 0.4s ease;
 }
-.chess-robot--alert .chess-robot__frame::before { opacity: 0.6; }
 
 /* Editorial corner brackets */
 .chess-robot__corner {
   position: absolute;
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   border-color: rgba(245, 243, 239, 0.5);
   border-style: solid;
   border-width: 0;
   z-index: 3;
   pointer-events: none;
 }
-.chess-robot__corner--tl { top: 6px; left: 6px;     border-top-width: 1px;    border-left-width: 1px; }
-.chess-robot__corner--tr { top: 6px; right: 6px;    border-top-width: 1px;    border-right-width: 1px; }
+.chess-robot__corner--tl { top: 6px; left: 6px; border-top-width: 1px; border-left-width: 1px; }
+.chess-robot__corner--tr { top: 6px; right: 6px; border-top-width: 1px; border-right-width: 1px; }
 .chess-robot__corner--bl { bottom: 34px; left: 6px; border-bottom-width: 1px; border-left-width: 1px; }
 .chess-robot__corner--br { bottom: 34px; right: 6px; border-bottom-width: 1px; border-right-width: 1px; }
-
-/* Gear button for opening the customization panel */
-.chess-robot__gear {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 28px;
-  height: 28px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(245, 243, 239, 0.04);
-  border: 1px solid rgba(245, 243, 239, 0.1);
-  color: rgba(245, 243, 239, 0.55);
-  cursor: pointer;
-  z-index: 6;
-  padding: 0;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.25s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.chess-robot__gear:hover,
-.chess-robot__gear:focus-visible {
-  background: color-mix(in srgb, var(--robot-accent) 22%, transparent);
-  border-color: var(--robot-accent);
-  color: #fff;
-  transform: rotate(45deg);
-  outline: none;
-}
-.chess-robot__gear:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--robot-accent) 50%, transparent);
-}
-.chess-robot--panel-open .chess-robot__gear { transform: rotate(90deg); }
 
 /* Screen area holds the SVG portrait */
 .chess-robot__screen {
@@ -1663,6 +1607,7 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   z-index: 1;
 }
 .chess-robot__screen::after {
+  /* Soft inner vignette so the robot fades into the frame */
   content: '';
   position: absolute;
   inset: 0;
@@ -1670,7 +1615,7 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   pointer-events: none;
 }
 
-/* Vintage CRT scanlines */
+/* Scanlines — vintage CRT feel, very subtle */
 .chess-robot__scanlines {
   position: absolute;
   inset: 0;
@@ -1700,26 +1645,40 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   animation: robot-breathe 5.4s ease-in-out infinite;
   transition: transform 0.4s cubic-bezier(.2, .8, .2, 1);
 }
-.robot-portrait--alert { transform: translateY(-2px) scale(1.015); }
+.robot-portrait--alert {
+  transform: translateY(-2px) scale(1.015);
+}
 @keyframes robot-breathe {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(1.5px); }
 }
 
-/* Eye LEDs — pulse idly, flare on alert */
+/* Eye LEDs — always pulsing, flare on alert */
 .robot-eye {
   transform-origin: center;
   animation: robot-eye-pulse 3.6s ease-in-out infinite;
 }
-.robot-eye-halo { animation: robot-halo-pulse 3.6s ease-in-out infinite; }
-.chess-robot--alert .robot-eye       { animation: robot-eye-flare 0.9s ease-out 2; }
-.chess-robot--alert .robot-eye-halo  { animation: robot-halo-flare 0.9s ease-out 2; }
-@keyframes robot-eye-pulse  { 0%, 100% { fill-opacity: 0.85; } 50% { fill-opacity: 1; } }
-@keyframes robot-halo-pulse { 0%, 100% { opacity: 0.18; }     50% { opacity: 0.32; } }
+.robot-eye-halo {
+  animation: robot-halo-pulse 3.6s ease-in-out infinite;
+}
+.chess-robot--alert .robot-eye {
+  animation: robot-eye-flare 0.9s ease-out 2;
+}
+.chess-robot--alert .robot-eye-halo {
+  animation: robot-halo-flare 0.9s ease-out 2;
+}
+@keyframes robot-eye-pulse {
+  0%, 100% { fill-opacity: 0.85; }
+  50%      { fill-opacity: 1; }
+}
+@keyframes robot-halo-pulse {
+  0%, 100% { opacity: 0.18; }
+  50%      { opacity: 0.32; }
+}
 @keyframes robot-eye-flare {
-  0%   { fill-opacity: 0.5; }
-  50%  { fill-opacity: 1; filter: drop-shadow(0 0 6px var(--robot-accent)); }
-  100% { fill-opacity: 0.9; }
+  0%   { fill-opacity: 0.5; filter: drop-shadow(0 0 0 #E8241A); }
+  50%  { fill-opacity: 1;   filter: drop-shadow(0 0 6px #ff5b4a); }
+  100% { fill-opacity: 0.9; filter: drop-shadow(0 0 2px #E8241A); }
 }
 @keyframes robot-halo-flare {
   0%   { opacity: 0.2; }
@@ -1755,17 +1714,22 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   color: rgba(245, 243, 239, 0.65);
 }
 .chess-robot__dot {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--robot-accent);
-  box-shadow: 0 0 6px var(--robot-halo);
+  background: var(--td-accent);
+  box-shadow: 0 0 6px rgba(232, 36, 26, 0.7);
   animation: robot-dot-blink 1.8s ease-in-out infinite;
-  flex-shrink: 0;
 }
-@keyframes robot-dot-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-.chess-robot__label { line-height: 1; }
+@keyframes robot-dot-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.chess-robot__label {
+  line-height: 1;
+}
 
-/* Speech bubble */
+/* Speech bubble — editorial transcript strip */
 .chess-robot__bubble {
   position: relative;
   display: flex;
@@ -1775,16 +1739,16 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
   padding: 12px 14px;
   background: #0d0d12;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-left: 2px solid var(--robot-accent);
+  border-left: 2px solid var(--td-accent);
   border-radius: 4px;
   font-family: 'Space Mono', monospace;
   font-size: 12px;
   line-height: 1.55;
   color: #c8c8b8;
   box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55);
-  transition: border-left-color 0.4s ease, box-shadow 0.4s ease;
 }
 .chess-robot__bubble::before {
+  /* tiny speech notch pointing up to the robot frame */
   content: '';
   position: absolute;
   top: -6px;
@@ -1798,259 +1762,40 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
 }
 .chess-robot__bubble-caret {
   font-family: 'Space Mono', monospace;
-  color: var(--robot-accent);
+  color: var(--td-accent);
   font-weight: 700;
   line-height: 1.5;
   flex-shrink: 0;
-  transition: color 0.4s ease;
 }
 .chess-robot__bubble-text {
   margin: 0;
   flex: 1;
   font-style: italic;
-  font-family: var(--robot-font);
+  font-family: 'Cormorant Garamond', 'Space Mono', serif;
   font-size: 15px;
   line-height: 1.45;
   color: rgba(245, 243, 239, 0.88);
   letter-spacing: 0.005em;
-  transition: font-family 0.2s ease;
 }
-.chess-robot--mood-trash .chess-robot__bubble-text  { font-style: normal; font-weight: 700; letter-spacing: 0.01em; }
-.chess-robot--mood-chaos .chess-robot__bubble-text  { font-style: normal; font-size: 18px; letter-spacing: 0.02em; line-height: 1.3; }
-.chess-robot--mood-silent .chess-robot__bubble-text { font-size: 14px; opacity: 0.78; }
-
 .chess-robot__cursor {
   display: inline-block;
   margin-left: 2px;
-  color: var(--robot-accent);
+  color: var(--td-accent);
   font-weight: 700;
   animation: robot-cursor-blink 1s steps(2, start) infinite;
 }
-@keyframes robot-cursor-blink { 50% { opacity: 0; } }
+@keyframes robot-cursor-blink {
+  50% { opacity: 0; }
+}
 
-/* High-impact alert bubble flash */
+/* When a high-impact move fires, briefly flash the bubble border */
 .chess-robot--alert .chess-robot__bubble {
   animation: robot-bubble-flash 1.2s ease-out;
 }
 @keyframes robot-bubble-flash {
-  0%   { box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 0 1px transparent; }
-  30%  { box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 18px var(--robot-halo); }
-  100% { box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 0 1px transparent; }
-}
-
-/* ─── Customization panel ─────────────────────────────────────────── */
-.chess-robot__panel {
-  position: absolute;
-  top: 40px;
-  left: 10px;
-  right: 10px;
-  bottom: 40px;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 14px 14px 16px;
-  overflow-y: auto;
-  background: rgba(8, 8, 12, 0.92);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(245, 243, 239, 0.08);
-  border-radius: 4px;
-  color: var(--td-fg);
-  animation: robot-panel-in 0.28s cubic-bezier(.2, .8, .2, 1);
-  scrollbar-width: thin;
-  scrollbar-color: var(--robot-halo) transparent;
-}
-.chess-robot__panel::-webkit-scrollbar { width: 6px; }
-.chess-robot__panel::-webkit-scrollbar-thumb {
-  background: var(--robot-halo);
-  border-radius: 3px;
-}
-@keyframes robot-panel-in {
-  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-.chess-robot__panel-section { display: flex; flex-direction: column; gap: 8px; }
-.chess-robot__panel-section--toggles { gap: 6px; }
-.chess-robot__panel-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(245, 243, 239, 0.45);
-}
-.chess-robot__moods {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-.chess-robot__mood-chip {
-  --chip-accent: var(--robot-accent);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 8px;
-  background: rgba(245, 243, 239, 0.03);
-  border: 1px solid rgba(245, 243, 239, 0.08);
-  border-radius: 4px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(245, 243, 239, 0.85);
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.chess-robot__mood-swatch {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--chip-accent);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--chip-accent) 50%, transparent);
-  flex-shrink: 0;
-}
-.chess-robot__mood-chip:hover,
-.chess-robot__mood-chip:focus-visible {
-  background: color-mix(in srgb, var(--chip-accent) 12%, transparent);
-  border-color: var(--chip-accent);
-  color: #fff;
-  outline: none;
-}
-.chess-robot__mood-chip.is-active {
-  background: color-mix(in srgb, var(--chip-accent) 22%, transparent);
-  border-color: var(--chip-accent);
-  color: #fff;
-  box-shadow: 0 0 0 1px var(--chip-accent);
-}
-.chess-robot__tagline {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 12px;
-  color: rgba(245, 243, 239, 0.6);
-  padding-top: 2px;
-  line-height: 1.4;
-}
-
-.chess-robot__spice,
-.chess-robot__speed {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.chess-robot__pill {
-  padding: 5px 9px;
-  background: rgba(245, 243, 239, 0.03);
-  border: 1px solid rgba(245, 243, 239, 0.08);
-  border-radius: 999px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: rgba(245, 243, 239, 0.75);
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.chess-robot__pill:hover,
-.chess-robot__pill:focus-visible {
-  background: color-mix(in srgb, var(--robot-accent) 12%, transparent);
-  border-color: var(--robot-accent);
-  color: #fff;
-  outline: none;
-}
-.chess-robot__pill.is-active {
-  background: var(--robot-accent);
-  border-color: var(--robot-accent);
-  color: #fff;
-}
-
-.chess-robot__toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(245, 243, 239, 0.78);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-.chess-robot__toggle input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 28px;
-  height: 16px;
-  background: rgba(245, 243, 239, 0.1);
-  border: 1px solid rgba(245, 243, 239, 0.15);
-  border-radius: 999px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-  flex-shrink: 0;
-}
-.chess-robot__toggle input[type="checkbox"]::before {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  width: 12px;
-  height: 12px;
-  background: rgba(245, 243, 239, 0.85);
-  border-radius: 50%;
-  transition: transform 0.2s, background-color 0.2s;
-}
-.chess-robot__toggle input[type="checkbox"]:checked {
-  background: var(--robot-accent);
-  border-color: var(--robot-accent);
-}
-.chess-robot__toggle input[type="checkbox"]:checked::before {
-  transform: translateX(12px);
-  background: #fff;
-}
-.chess-robot__toggle input[type="checkbox"]:focus-visible {
-  outline: 2px solid var(--robot-accent);
-  outline-offset: 2px;
-}
-.chess-robot__toggle-label { line-height: 1.3; }
-
-.chess-robot__reset {
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 6px 10px;
-  background: transparent;
-  border: 1px dashed rgba(245, 243, 239, 0.15);
-  border-radius: 4px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(245, 243, 239, 0.55);
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.chess-robot__reset:hover,
-.chess-robot__reset:focus-visible {
-  color: #fff;
-  border-color: var(--robot-accent);
-  outline: none;
-}
-
-/* Reduced motion: kill idle animations so we don't jitter sensitive users */
-@media (prefers-reduced-motion: reduce) {
-  .robot-portrait,
-  .robot-eye,
-  .robot-eye-halo,
-  .robot-chest-led,
-  .chess-robot__scanlines,
-  .chess-robot__dot,
-  .chess-robot__cursor {
-    animation: none !important;
-  }
-  .chess-robot__bubble-text { transition: none; }
+  0%   { border-left-color: var(--td-accent); box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(232, 36, 26, 0); }
+  30%  { border-left-color: #ff6a5e;            box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 18px rgba(232, 36, 26, 0.35); }
+  100% { border-left-color: var(--td-accent); box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(232, 36, 26, 0); }
 }
 
 @media (max-width: 900px) {
@@ -2066,17 +1811,11 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
     width: min(92vw, 520px);
   }
   .chess-robot__frame {
-    max-width: 360px;
+    max-width: 320px;
     margin: 0 auto;
   }
   .chess-robot__bubble {
     min-height: 72px;
-  }
-  .chess-robot__gear {
-    width: 36px;
-    height: 36px;
-    top: 4px;
-    right: 4px;
   }
 }
 @media (max-width: 768px) {
@@ -2094,11 +1833,8 @@ details[open] .faq-icon { transform: rotate(45deg); color: var(--td-accent); }
 }
 .footer-reveal::before {
   content: ''; position: absolute; inset: 0; z-index: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232, 36, 26, 0.28), transparent 70%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><filter id="s"><feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1   0 0 0 0 0.6   0 0 0 0 0.25   0 0 0 1 0"/></filter><rect width="100%25" height="100%25" filter="url(%23s)" opacity="0.75"/></svg>');
-  background-size: cover, 600px 600px; background-repeat: no-repeat, repeat;
-  opacity: 0.08; mix-blend-mode: screen;
+  background: url("/Ember Smoke Abstract.jpg") no-repeat center top;
+  background-size: cover; opacity: 0.06; mix-blend-mode: screen;
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 50%);
   mask-image: linear-gradient(to bottom, black 0%, transparent 50%);
   pointer-events: none;
@@ -2527,40 +2263,6 @@ p, span, div, button, a, label, li, summary, .label {
   font-weight: 600;
 }
 
-/* Close button on the expanded card — big tap target, visible on all sizes */
-.orbital__card-close {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(245, 243, 239, 0.04);
-  border: 1px solid rgba(245, 243, 239, 0.1);
-  color: rgba(245, 243, 239, 0.65);
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-  z-index: 10;
-  padding: 0;
-  /* Guarantee a comfortable mobile tap target */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-.orbital__card-close:hover,
-.orbital__card-close:focus-visible {
-  background: rgba(232, 36, 26, 0.22);
-  border-color: rgba(232, 36, 26, 0.7);
-  color: #fff;
-  transform: rotate(90deg);
-  outline: none;
-}
-.orbital__card-close:focus-visible {
-  box-shadow: 0 0 0 2px rgba(232, 36, 26, 0.5);
-}
-
 .orbital__card {
   position: absolute;
   left: 50%;
@@ -2580,9 +2282,8 @@ p, span, div, button, a, label, li, summary, .label {
   z-index: 400;
 }
 @keyframes orbital-card-in {
-  0%   { opacity: 0; transform: translate(-50%, -10px) scale(0.92); filter: blur(2px); }
-  60%  { opacity: 1; transform: translate(-50%, 1px) scale(1.01); filter: blur(0); }
-  100% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
+  from { opacity: 0; transform: translate(-50%, -6px) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 .orbital__card--up {
   top: auto;
@@ -2590,29 +2291,12 @@ p, span, div, button, a, label, li, summary, .label {
   animation: orbital-card-in-up 0.35s cubic-bezier(.2,.8,.2,1);
 }
 @keyframes orbital-card-in-up {
-  0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.92); filter: blur(2px); }
-  60%  { opacity: 1; transform: translate(-50%, -1px) scale(1.01); filter: blur(0); }
-  100% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
-}
-.orbital__card.is-closing {
-  animation: orbital-card-out 0.24s cubic-bezier(.4, 0, .6, 1) forwards;
-  pointer-events: none;
-}
-.orbital__card.orbital__card--up.is-closing {
-  animation: orbital-card-out-up 0.24s cubic-bezier(.4, 0, .6, 1) forwards;
-}
-@keyframes orbital-card-out {
-  from { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translate(-50%, -8px) scale(0.94); filter: blur(2px); }
-}
-@keyframes orbital-card-out-up {
-  from { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translate(-50%, 8px) scale(0.94); filter: blur(2px); }
+  from { opacity: 0; transform: translate(-50%, 6px) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 .orbital__card-top {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 10px;
-  padding-right: 36px; /* reserve room for the close button */
 }
 .orbital__status {
   font-family: 'Space Mono', monospace;
@@ -2731,14 +2415,5 @@ p, span, div, button, a, label, li, summary, .label {
   .orbital__core-inner { width: 48px; height: 48px; font-size: 16px; }
   .orbital__core-slash { height: 16px; }
   .orbital__card { width: 260px; }
-  .orbital__node-btn { width: 44px; height: 44px; } /* WCAG AAA tap target */
-  .orbital__card-close {
-    width: 40px;
-    height: 40px;
-    top: 4px;
-    right: 4px;
-  }
-  .orbital__card-top {
-    padding-right: 42px;
-  }
+  .orbital__node-btn { width: 38px; height: 38px; }
 }
