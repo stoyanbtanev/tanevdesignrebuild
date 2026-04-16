@@ -2020,6 +2020,15 @@ p, span, div, button, a, label, li, summary, .label {
   from { opacity: 0; transform: translate(-50%, -6px) scale(0.96); }
   to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
+.orbital__card--up {
+  top: auto;
+  bottom: calc(100% + 36px);
+  animation: orbital-card-in-up 0.35s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes orbital-card-in-up {
+  from { opacity: 0; transform: translate(-50%, 6px) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
 .orbital__card-top {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 10px;
@@ -2125,6 +2134,11 @@ p, span, div, button, a, label, li, summary, .label {
   text-align: center;
   z-index: 2;
   position: relative;
+  transition: opacity 0.25s ease;
+}
+.orbital__hint.is-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {

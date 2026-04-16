@@ -212,6 +212,7 @@ export default function RadialOrbitalTimeline() {
             const zIndex = Math.round(100 + 50 * Math.cos(rad));
             const opacity = Math.max(0.45, 0.55 + 0.45 * Math.cos(rad));
             const isExpanded = expanded === node.id;
+            const flipCardUp = y > 10; // node in bottom half → open card upward
             const isRelated =
               expanded &&
               SERVICE_NODES.find((n) => n.id === expanded)?.relatedIds.includes(node.id);
@@ -247,7 +248,10 @@ export default function RadialOrbitalTimeline() {
                 </div>
 
                 {isExpanded && (
-                  <div className="orbital__card" onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className={`orbital__card ${flipCardUp ? 'orbital__card--up' : ''}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <div className="orbital__card-top">
                       <span className={`orbital__status orbital__status--${node.status.toLowerCase()}`}>
                         {node.status}
@@ -308,7 +312,7 @@ export default function RadialOrbitalTimeline() {
         </div>
       </div>
 
-      <div className="orbital__hint">
+      <div className={`orbital__hint ${expanded ? 'is-hidden' : ''}`}>
         {lang === 'bg'
           ? 'Кликни на услуга за детайли • Кликни извън, за да затвориш'
           : 'Click a service to expand • Click outside to close'}
