@@ -365,51 +365,31 @@
   pointer-events: none;
   z-index: 1;
 }
+.hero__floating { perspective: 1200px; }
 .hero__float-el {
   position: absolute;
-  will-change: transform;
+  will-change: transform, opacity;
   pointer-events: auto;
-  opacity: 0;
-  animation: floatFadeIn 0.5s ease forwards;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
-.hero__float-el:nth-child(1) { animation-delay: 0.0s; }
-.hero__float-el:nth-child(2) { animation-delay: 0.15s; }
-.hero__float-el:nth-child(3) { animation-delay: 0.3s; }
-.hero__float-el:nth-child(4) { animation-delay: 0.45s; }
-.hero__float-el:nth-child(5) { animation-delay: 0.6s; }
-.hero__float-el:nth-child(6) { animation-delay: 0.75s; }
-.hero__float-el:nth-child(7) { animation-delay: 0.9s; }
-.hero__float-el:nth-child(8) { animation-delay: 1.05s; }
-@keyframes floatFadeIn { to { opacity: 1; } }
+.hero__float-inner {
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
 .hero__float-el img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 4px;
-  transition: transform 0.2s ease;
+  border-radius: 6px;
+  transition: transform 0.3s ease, filter 0.3s ease;
   cursor: pointer;
+  filter: brightness(0.78) saturate(0.85);
+  box-shadow: 0 20px 40px -12px rgba(0,0,0,0.55);
 }
-.hero__float-el:hover img { transform: scale(1.05); }
-
-.hero__float-el:nth-child(1) { top: 8%;  left: 10%; width: clamp(64px, 6vw, 96px);   height: clamp(64px, 6vw, 96px); }
-.hero__float-el:nth-child(2) { top: 10%; left: 30%; width: clamp(80px, 7vw, 112px);  height: clamp(80px, 7vw, 112px); }
-.hero__float-el:nth-child(3) { top: 18%; left: 56%; width: clamp(112px, 10vw, 160px); height: clamp(140px, 12vw, 180px); }
-.hero__float-el:nth-child(4) { top: 5%;  left: 84%; width: clamp(96px, 8vw, 128px);  height: clamp(96px, 8vw, 128px); }
-.hero__float-el:nth-child(5) { top: 40%; left: 2%;  width: clamp(112px, 9vw, 144px); height: clamp(112px, 9vw, 144px); }
-.hero__float-el:nth-child(6) { top: 66%; left: 78%; width: clamp(112px, 9vw, 144px); height: clamp(112px, 10vw, 172px); }
-.hero__float-el:nth-child(7) { top: 58%; left: 14%; width: clamp(140px, 11vw, 180px); height: clamp(160px, 13vw, 220px); }
-.hero__float-el:nth-child(8) { top: 74%; left: 50%; width: clamp(96px, 8vw, 128px);  height: clamp(96px, 8vw, 128px); }
-
-@media (max-width: 768px) {
-  .hero__float-el:nth-child(1) { width: 60px;  height: 60px; }
-  .hero__float-el:nth-child(2) { width: 70px;  height: 70px; }
-  .hero__float-el:nth-child(3) { top: 16%; width: 90px; height: 110px; left: 60%; }
-  .hero__float-el:nth-child(4) { left: 76%;   width: 60px;  height: 60px; }
-  .hero__float-el:nth-child(5) { width: 80px;  height: 80px; }
-  .hero__float-el:nth-child(6) { left: 72%;   width: 80px;  height: 100px; }
-  .hero__float-el:nth-child(7) { top: 56%; width: 100px; height: 130px; }
-  .hero__float-el:nth-child(8) { top: 72%; width: 70px;  height: 70px; }
-}
+.hero__float-el:hover img { transform: scale(1.06); filter: brightness(1) saturate(1); }
 .hero__content {
   position: relative; z-index: 10; padding: 0 20px;
 }
@@ -2455,8 +2435,12 @@ p, span, div, button, a, label, li, summary, .label {
 .orbital__node {
   position: absolute;
   left: 0; top: 0;
-  transition: opacity 0.4s ease, transform 0.05s linear;
+  transition: opacity 0.4s ease;
   cursor: pointer;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .orbital__node-btn {
   position: relative;

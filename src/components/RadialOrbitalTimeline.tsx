@@ -120,14 +120,20 @@ export default function RadialOrbitalTimeline() {
   const rafRef = useRef<number | null>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Auto-rotate loop
+  // Auto-rotate loop — throttled on small screens to prevent jitter
   useEffect(() => {
     if (!autoRotate) return;
+    const isSmall = typeof window !== 'undefined' && window.innerWidth < 640;
+    const minFrameMs = isSmall ? 1000 / 30 : 0; // cap to ~30fps on mobile
     let last = performance.now();
+    let lastPaint = last;
     const tick = (now: number) => {
       const dt = (now - last) / 1000;
       last = now;
-      setAngle((a) => (a + dt * 12) % 360); // 12deg/s, one lap ~30s
+      if (now - lastPaint >= minFrameMs) {
+        lastPaint = now;
+        setAngle((a) => (a + dt * 12) % 360);
+      }
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);

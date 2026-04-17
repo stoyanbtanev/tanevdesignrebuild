@@ -270,6 +270,48 @@ function Navigation() {
 }
 
 // ─── HERO ───
+// 28 scattered hero images (existing 8 + 20 newly-generated). Positions are
+// pre-baked so layout is deterministic across reloads. Sizes and depths tuned
+// for the leonardo-style scatter-from-center reveal on mount.
+type FloatEl = { src: string; top: number; left: number; w: number; h: number; depth: number; rot: number };
+const FLOAT_ELS: FloatEl[] = [
+  // outer left band
+  { src: '/1.webp',     top: 6,  left: 4,  w: 10, h: 12, depth: 1,   rot: -6 },
+  { src: '/hero-13.jpg', top: 22, left: 1,  w: 11, h: 14, depth: 2,   rot: 3 },
+  { src: '/7.webp',     top: 44, left: 2,  w: 10, h: 13, depth: 1.5, rot: -3 },
+  { src: '/hero-18.jpg', top: 66, left: 3,  w: 12, h: 15, depth: 2,   rot: 4 },
+  { src: '/5.webp',     top: 82, left: 5,  w: 9,  h: 11, depth: 1,   rot: -5 },
+  // inner left
+  { src: '/hero-9.jpg',  top: 14, left: 18, w: 9,  h: 11, depth: 0.8, rot: 2 },
+  { src: '/hero-22.jpg', top: 38, left: 15, w: 10, h: 13, depth: 1.2, rot: -4 },
+  { src: '/2.webp',     top: 62, left: 17, w: 9,  h: 11, depth: 0.6, rot: 5 },
+  { src: '/hero-17.jpg', top: 84, left: 20, w: 9,  h: 11, depth: 1,   rot: -2 },
+  // upper center band (above headline)
+  { src: '/hero-10.jpg', top: 4,  left: 34, w: 10, h: 12, depth: 0.5, rot: -4 },
+  { src: '/hero-26.jpg', top: 8,  left: 50, w: 11, h: 13, depth: 1,   rot: 6 },
+  { src: '/3.webp',     top: 6,  left: 66, w: 10, h: 12, depth: 0.7, rot: -3 },
+  // lower center band (below headline)
+  { src: '/hero-14.jpg', top: 82, left: 40, w: 10, h: 12, depth: 0.9, rot: 4 },
+  { src: '/8.webp',     top: 86, left: 56, w: 9,  h: 11, depth: 0.6, rot: -5 },
+  { src: '/hero-23.jpg', top: 80, left: 70, w: 10, h: 12, depth: 1.1, rot: 2 },
+  // inner right
+  { src: '/hero-11.jpg', top: 16, left: 76, w: 9,  h: 11, depth: 0.8, rot: 3 },
+  { src: '/6.webp',     top: 40, left: 78, w: 10, h: 13, depth: 1.2, rot: -2 },
+  { src: '/hero-20.jpg', top: 64, left: 77, w: 10, h: 12, depth: 0.9, rot: 4 },
+  // outer right band
+  { src: '/4.webp',     top: 8,  left: 88, w: 10, h: 12, depth: 1,   rot: 5 },
+  { src: '/hero-15.jpg', top: 28, left: 90, w: 9,  h: 11, depth: 2,   rot: -3 },
+  { src: '/hero-25.jpg', top: 50, left: 91, w: 10, h: 13, depth: 1.6, rot: 3 },
+  { src: '/hero-19.jpg', top: 72, left: 89, w: 10, h: 12, depth: 2,   rot: -4 },
+  // deep-back scattered
+  { src: '/hero-12.jpg', top: 30, left: 40, w: 7,  h: 9,  depth: 3,   rot: 0 },
+  { src: '/hero-16.jpg', top: 54, left: 60, w: 7,  h: 9,  depth: 3,   rot: 2 },
+  { src: '/hero-21.jpg', top: 70, left: 32, w: 7,  h: 9,  depth: 4,   rot: -3 },
+  { src: '/hero-24.jpg', top: 24, left: 62, w: 6,  h: 8,  depth: 4,   rot: 4 },
+  { src: '/hero-27.jpg', top: 48, left: 28, w: 7,  h: 9,  depth: 2.5, rot: -2 },
+  { src: '/hero-28.jpg', top: 62, left: 48, w: 7,  h: 9,  depth: 3.5, rot: 3 },
+];
+
 function Hero() {
   const floatingRef = useRef<HTMLDivElement>(null);
 
@@ -348,15 +390,37 @@ function Hero() {
   return (
     <section className="hero" id="hero">
       <div className="hero__floating" id="heroFloating" ref={floatingRef}>
-        {[1,2,3,4,5,6,7,8].map(i => (
-          <div key={i} className="hero__float-el" data-depth={[0.5,1,2,1,1,2,4,1][i-1]}>
-            <img src={`/${i}.webp`} alt={`Design sample ${i}`} loading="eager" decoding="async" />
-          </div>
-        ))}
+        {FLOAT_ELS.map((el, i) => {
+          // Size scales inversely with depth so further images read smaller.
+          const scale = 1 / (0.75 + el.depth * 0.18);
+          const w = el.w * scale;
+          const h = el.h * scale;
+          return (
+            <div
+              key={i}
+              className="hero__float-el"
+              data-depth={el.depth}
+              data-rot={el.rot}
+              style={{
+                top: `${el.top}%`,
+                left: `${el.left}%`,
+                width: `clamp(54px, ${w}vw, ${w * 12}px)`,
+                height: `clamp(66px, ${h}vw, ${h * 12}px)`,
+                zIndex: Math.round(10 - el.depth),
+                filter: `blur(${Math.max(0, el.depth - 1.5) * 0.6}px)`,
+                opacity: 1 - Math.min(0.35, (el.depth - 1) * 0.08),
+              }}
+            >
+              <div className="hero__float-inner">
+                <img src={el.src} alt="" loading={i < 8 ? 'eager' : 'lazy'} decoding="async" />
+              </div>
+            </div>
+          );
+        })}
       </div>
       <div className="hero__content">
         <div className="hero__headline">
-          <span className="line-wrapper"><T en="YOUR NEXT WEBSITE." bg="СЛЕДВАЩИЯТ ТИ САЙТ." /></span>
+          <span className="line-wrapper"><T en="BUILT BY ONE." bg="ОТ ЕДИН ЧОВЕК." /></span>
         </div>
         <div className="hero__headline">
           <span className="line-wrapper"><T en="NO COMPROMISE." bg="БЕЗ КОМПРОМИСИ." /></span>
@@ -987,6 +1051,25 @@ export default function Index() {
 
     const tl = gsap.timeline();
     tl.to('.nav', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+    // Leonardo-style scatter-from-center: images fly out from middle to their
+    // positions with a 3D rotate + stagger. Mobile gets a lighter variant.
+    tl.to('.hero__float-inner', {
+      x: 0, y: 0,
+      scale: 1,
+      rotateZ: (_i, el) => {
+        const outer = el.parentElement as HTMLElement;
+        return parseFloat(outer.dataset.rot || '0');
+      },
+      rotateX: 0,
+      rotateY: 0,
+      opacity: (_i, el) => {
+        const outer = el.parentElement as HTMLElement;
+        return parseFloat(outer.style.opacity || '1');
+      },
+      duration: isMobile ? 0.9 : 1.4,
+      ease: 'expo.out',
+      stagger: { each: isMobile ? 0.015 : 0.035, from: 'random' },
+    }, 0);
     tl.to('.hero__headline .char', {
       y: 0, opacity: 1,
       duration: isMobile ? 0.7 : 1,
@@ -1010,6 +1093,24 @@ export default function Index() {
     gsap.set('.hero__cta', { opacity: 0, y: 15 });
     gsap.set('.hero__bottom', { opacity: 0 });
     gsap.set('.nav', { opacity: 0, y: -10 });
+    // Pre-scatter state on the inner wrapper so parallax (outer transform)
+    // doesn't fight the entrance animation. Images start stacked at center.
+    gsap.set('.hero__float-inner', {
+      x: (_i, el) => {
+        const outer = el.parentElement as HTMLElement;
+        const rect = outer.getBoundingClientRect();
+        return window.innerWidth / 2 - (rect.left + rect.width / 2);
+      },
+      y: (_i, el) => {
+        const outer = el.parentElement as HTMLElement;
+        const rect = outer.getBoundingClientRect();
+        return window.innerHeight / 2 - (rect.top + rect.height / 2);
+      },
+      scale: 0.18,
+      opacity: 0,
+      rotateX: -35,
+      rotateY: () => (Math.random() - 0.5) * 40,
+    });
   }, []);
 
   // GSAP scroll animations - after preloader
