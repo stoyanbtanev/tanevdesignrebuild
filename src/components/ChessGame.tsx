@@ -809,7 +809,14 @@ export default function ChessGame() {
     else setSelected(null);
   }, [endGame, thinking, game, selected, legalDestinations, playerColor, commitPlayerMove]);
 
-  /* ─── DRAG-AND-DROP with pointer capture ────────────────────────────── */
+  /* ─── DRAG-AND-DROP ──────────────────────────────────────────────────
+     We intentionally avoid setPointerCapture here because capturing on the
+     source square would route all subsequent pointermove/pointerup events
+     to that square (hijacking events away from the board and from the
+     drop target). Instead we attach window-level listeners while a drag
+     is in progress — this keeps behaviour predictable even if the user
+     flings the pointer outside the board.
+  ──────────────────────────────────────────────────────────────────────── */
   const boardElRef = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState<{ from: Pos; x: number; y: number; squareSize: number } | null>(null);
   const dragRef = useRef<typeof drag>(null);
@@ -843,34 +850,45 @@ export default function ChessGame() {
     const size = rect.width / 8;
     setSelected([r, c]);
     setDrag({ from: [r, c], x: e.clientX, y: e.clientY, squareSize: size });
-    try { (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId); } catch { /* ignore */ }
+    // Prevent native touch behaviours (scrolling) during the drag
+    e.preventDefault();
   }, [endGame, thinking, game, playerColor]);
 
-  const onDragMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return;
-    setDrag(d => d ? { ...d, x: e.clientX, y: e.clientY } : d);
-  }, []);
-
-  const endDrag = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    const d = dragRef.current;
-    if (!d) return;
-    const target = getSquareFromPoint(e.clientX, e.clientY);
-    setDrag(null);
-    try { (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId); } catch { /* ignore */ }
-    if (!target) { setSelected(null); return; }
-    // Same square → treat as click select (keep selected for click-to-move)
-    if (target[0] === d.from[0] && target[1] === d.from[1]) {
-      return;
-    }
-    const legalForFrom = legalMovesByFrom.get(`${d.from[0]},${d.from[1]}`) || [];
-    const move = legalForFrom.find(m => m.to[0] === target[0] && m.to[1] === target[1]);
-    if (move) commitPlayerMove(move);
-    else {
-      // illegal drop — flash the origin square
-      setSelected(null);
-      setShakeKey(k => k + 1);
-    }
-  }, [getSquareFromPoint, legalMovesByFrom, commitPlayerMove]);
+  /* Attach window-level pointer move/up/cancel listeners only while a
+     drag is in progress. This keeps the drop target hit-test reliable
+     across browsers and avoids any pointer capture gotchas. */
+  useEffect(() => {
+    if (!drag) return;
+    const onMove = (e: PointerEvent) => {
+      setDrag(d => d ? { ...d, x: e.clientX, y: e.clientY } : d);
+    };
+    const onUp = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) { setDrag(null); return; }
+      const target = getSquareFromPoint(e.clientX, e.clientY);
+      setDrag(null);
+      if (!target) { setSelected(null); return; }
+      // Same square → keep selected so click-to-move still works
+      if (target[0] === d.from[0] && target[1] === d.from[1]) return;
+      const legalForFrom = legalMovesByFrom.get(`${d.from[0]},${d.from[1]}`) || [];
+      const move = legalForFrom.find(m => m.to[0] === target[0] && m.to[1] === target[1]);
+      if (move) commitPlayerMove(move);
+      else {
+        // illegal drop — brief shake feedback
+        setSelected(null);
+        setShakeKey(k => k + 1);
+      }
+    };
+    const onCancel = () => setDrag(null);
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('pointerup', onUp, { passive: true });
+    window.addEventListener('pointercancel', onCancel, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onCancel);
+    };
+  }, [drag, getSquareFromPoint, legalMovesByFrom, commitPlayerMove]);
 
   /* ─── NEW GAME / FLIP / TC CHANGE ────────────────────────────────────── */
   const resetBoard = useCallback((tc: TimeControl, nextFlipped: boolean) => {
@@ -929,10 +947,10 @@ export default function ChessGame() {
 
   return (
     <div className="chess-game chess-game--v2">
-      {/* Robot floats above the board */}
-      <ChessRobot event={robotEvent} variant="floating" />
-
       <div className="chess-arena">
+        {/* Robot floats above the board — sits at the top of the arena column */}
+        <ChessRobot event={robotEvent} variant="floating" />
+
         {/* Top clock (opponent-to-player perspective: top shows the side that is visually on top of the board) */}
         <ClockRow
           color={playerIsTop}
@@ -947,9 +965,6 @@ export default function ChessGame() {
             className={`chess-board chess-board--v2${shakeKey ? ' chess-shake' : ''}${drag ? ' is-dragging' : ''}`}
             key={shakeKey}
             ref={boardElRef}
-            onPointerMove={onDragMove}
-            onPointerUp={endDrag}
-            onPointerCancel={endDrag}
           >
             {rowsOrder.map((r, rowIdx) => colsOrder.map((c, colIdx) => {
               const isLight = (r + c) % 2 === 0;

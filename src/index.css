@@ -494,7 +494,7 @@
 ═══════════════════════════════════════════ */
 .stats-bar {
   padding: 80px 40px;
-  background: #0d0d0d;
+  background: transparent;
   border-top: 1px solid var(--td-border);
   border-bottom: 1px solid var(--td-border);
 }
@@ -542,7 +542,7 @@
    SERVICES (HORIZONTAL SCROLL)
 ═══════════════════════════════════════════ */
 .horizontal-services {
-  background: #0d0d0d; color: var(--td-fg); position: relative;
+  background: transparent; color: var(--td-fg); position: relative;
 }
 .hz-wrapper {
   position: relative; height: 100svh; overflow: hidden; display: flex; align-items: center;
@@ -3073,7 +3073,8 @@ body,
   flex-direction: column;
   align-items: center;
   gap: 0;
-  padding: 48px 0 60px;
+  /* Extra top padding reserves space for the robot peeking above the board */
+  padding: 160px 0 60px;
   position: relative;
   --board-size: min(92vw, 520px);
   --accent-glow: rgba(232, 36, 26, 0.5);
@@ -3085,7 +3086,13 @@ body,
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
+  /* Allow the robot to overflow above */
+  overflow: visible;
 }
+/* Board must be layered ABOVE the robot so the lower body is hidden behind it */
+.chess-game--v2 .chess-board-wrap { position: relative; z-index: 2; }
+.chess-game--v2 .chess-clock-row   { position: relative; z-index: 2; }
+.chess-game--v2 .chess-controls--v2 { position: relative; z-index: 2; }
 
 /* CLOCK ROW — minimal, uppercase, mono */
 .chess-clock-row {
@@ -3399,84 +3406,83 @@ body,
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ROBOT — FLOATING VARIANT  (sits above the board on every device)
+
+   The robot lives inline at the top of the chess-arena column so it always
+   "spectates" the board from above. A popup speech bubble is absolutely
+   positioned relative to this container and points downward to the robot.
 ═══════════════════════════════════════════════════════════════════════════ */
+/* Robot sits BEHIND the board — only the head + shoulders peek over the top edge.
+   Absolutely positioned relative to .chess-arena; the board (z-index:2) crops
+   the lower body so it looks like he's standing behind, spectating. */
 .chess-robot--floating {
   position: absolute;
-  top: -80px;                             /* sits centered above the board */
   left: 50%;
+  /* Upper body overhang above the top of the arena / board */
+  top: -110px;
   transform: translateX(-50%);
-  width: 140px;
-  height: 180px;
-  z-index: 20;
-  pointer-events: none;                   /* container doesn't block board input */
+  width: 180px;
+  height: 260px;
+  margin: 0;
+  z-index: 1;                             /* behind the board (board gets z:2) */
+  pointer-events: none;                   /* don't block board interaction */
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.55));
 }
-.chess-robot--floating > * {
-  pointer-events: auto;                   /* interactive children stay interactive */
-}
+.chess-robot--floating .chess-robot__gear,
+.chess-robot--floating .chess-robot__panel { pointer-events: auto; }
+
+/* No card, no border, no scanlines — the robot is a free-standing figure now */
 .chess-robot--floating .chess-robot__frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1.05;
-  padding: 6px 8px 26px;
-  border-radius: 14px;
-  background: linear-gradient(145deg, rgba(15, 13, 10, 0.92), rgba(5, 5, 5, 0.94));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(0, 0, 0, 0.35) inset,
-    0 0 28px color-mix(in srgb, var(--robot-accent) 15%, transparent);
+  height: 100%;
+  aspect-ratio: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
 }
 [data-theme="light"] .chess-robot--floating .chess-robot__frame {
-  background: linear-gradient(145deg, rgba(240, 234, 222, 0.95), rgba(220, 210, 192, 0.95));
-  border-color: rgba(16, 14, 12, 0.12);
-  box-shadow:
-    0 18px 40px rgba(16, 14, 12, 0.25),
-    0 0 0 1px rgba(16, 14, 12, 0.06) inset,
-    0 0 28px color-mix(in srgb, var(--robot-accent) 18%, transparent);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-/* Screen area — compact portrait */
+/* Screen area — just a transparent container for the portrait */
 .chess-robot--floating .chess-robot__screen {
   position: relative;
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  border-radius: 10px;
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(0,0,0,0.25), transparent);
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
 }
 [data-theme="light"] .chess-robot--floating .chess-robot__screen {
-  background: linear-gradient(180deg, rgba(16, 14, 12, 0.08), transparent);
+  background: transparent;
 }
+.chess-robot--floating .chess-robot__screen::after { display: none; }
 .chess-robot--floating .robot-portrait {
-  width: 90%;
-  height: 90%;
-  transform: translateY(2%);
+  width: 100%;
+  height: auto;
+  transform: none;
 }
 
-/* Scanlines retained but softer in floating mode */
-.chess-robot--floating .chess-robot__scanlines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(255, 255, 255, 0.03) 2px,
-    rgba(255, 255, 255, 0.03) 3px
-  );
-  mix-blend-mode: overlay;
-}
+/* No scanlines on the free-standing figure */
+.chess-robot--floating .chess-robot__scanlines { display: none; }
 
-/* Badge */
-.chess-robot--floating .chess-robot__badge {
+/* Hide badge + corners — they belonged to the old broadcast card */
+.chess-robot--floating .chess-robot__badge,
+.chess-robot--floating .chess-robot__corner { display: none; }
+
+/* (legacy, no-op in new design) */
+.chess-robot--floating .chess-robot__badge--legacy {
   position: absolute;
   bottom: 6px;
   left: 8px;
@@ -3712,15 +3718,16 @@ body,
 ═══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .chess-game--v2 {
-    padding-top: 80px;
+    padding-top: 130px;
     --board-size: min(94vw, 440px);
   }
   .chess-robot--floating {
-    top: -70px;
-    width: 104px;
-    height: 134px;
+    width: 150px;
+    height: 220px;
+    top: -92px;
+    margin: 0;
   }
-  .chess-robot__popup { font-size: 13px; }
+  .chess-robot__popup { font-size: 13px; width: min(300px, 90vw); }
   .chess-controls--v2 {
     flex-wrap: wrap;
     gap: 8px;
@@ -3732,15 +3739,14 @@ body,
 }
 
 @media (max-width: 420px) {
-  .chess-game--v2 { --board-size: 94vw; padding-top: 72px; }
+  .chess-game--v2 { --board-size: 94vw; padding-top: 110px; }
   .chess-robot--floating {
-    top: -62px;
-    width: 90px;
-    height: 118px;
+    width: 128px;
+    height: 190px;
+    top: -78px;
+    margin: 0;
   }
-  .chess-robot--floating .chess-robot__frame {
-    padding: 4px 6px 20px;
-  }
+  .chess-robot--floating .chess-robot__frame { padding: 0; }
   .chess-clock-row__time { font-size: 16px; }
   .chess-clock-row { height: 28px; padding: 0 10px; }
 }
