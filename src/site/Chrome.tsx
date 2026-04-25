@@ -379,10 +379,10 @@ function Overlay({ open, onClose }: { open: boolean; onClose: () => void }) {
       <div
         className="container-x"
         style={{
-          paddingTop: "clamp(88px, 10vh, 120px)",
-          paddingBottom: "clamp(32px, 4vh, 56px)",
+          paddingTop: "clamp(88px, 10svh, 120px)",
+          paddingBottom: "clamp(32px, 4svh, 56px)",
           display: "grid",
-          gap: "clamp(32px, 5vh, 56px)",
+          gap: "clamp(32px, 5svh, 56px)",
           minHeight: "100%",
           alignContent: "space-between",
         }}

@@ -483,7 +483,7 @@ export function Stack() {
         .stack-modal {
           position: relative;
           width: min(100%, 720px);
-          max-height: 84vh;
+          max-height: 84svh;
           overflow: auto;
           background: rgba(10,10,10,0.96);
           border: 1px solid rgba(245,243,239,0.12);

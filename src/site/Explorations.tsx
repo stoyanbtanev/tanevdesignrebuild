@@ -25,32 +25,38 @@ export function Explorations() {
       pinSpacing: false,
     });
 
+    const vh = () => window.innerHeight;
+    const leftDistance = () => left.scrollHeight + vh() * 0.4;
+    const rightDistance = () => right.scrollHeight + vh() * 0.4;
+
     const parallaxLeft = gsap.fromTo(
       left,
-      { yPercent: 35 },
+      { y: () => vh() * 0.9 },
       {
-        yPercent: -55,
+        y: () => vh() * 0.9 - leftDistance(),
         ease: 'none',
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: 'bottom bottom',
           scrub: true,
+          invalidateOnRefresh: true,
         },
       }
     );
 
     const parallaxRight = gsap.fromTo(
       right,
-      { yPercent: 55 },
+      { y: () => vh() * 1.1 },
       {
-        yPercent: -35,
+        y: () => vh() * 1.1 - rightDistance(),
         ease: 'none',
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: 'bottom bottom',
           scrub: true,
+          invalidateOnRefresh: true,
         },
       }
     );
@@ -77,8 +83,8 @@ export function Explorations() {
       >
         {/* Parallax columns */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="max-w-[1400px] h-full mx-auto px-6 md:px-10 lg:px-16 grid grid-cols-2 gap-12 md:gap-32">
-            <div ref={colLeftRef} className="flex flex-col gap-16 md:gap-32 pointer-events-auto will-change-transform">
+          <div className="relative max-w-[1400px] h-full mx-auto">
+            <div ref={colLeftRef} className="absolute top-0 left-0 w-1/2 px-6 md:px-10 lg:px-16 flex flex-col items-center gap-16 md:gap-32 pointer-events-auto will-change-transform">
               {left.map((item, i) => (
                 <ExplorationCard
                   key={item.src}
@@ -91,7 +97,7 @@ export function Explorations() {
             </div>
             <div
               ref={colRightRef}
-              className="flex flex-col gap-16 md:gap-32 mt-24 md:mt-48 pointer-events-auto will-change-transform"
+              className="absolute top-0 right-0 w-1/2 px-6 md:px-10 lg:px-16 flex flex-col items-center gap-16 md:gap-32 pointer-events-auto will-change-transform"
             >
               {right.map((item, i) => (
                 <ExplorationCard
