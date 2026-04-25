@@ -1,39 +1,42 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    document.title = "404 — tanev.design";
+    document.title = '404 — tanev.design';
   }, [location.pathname]);
 
   return (
-    <main
-      style={{
-        minHeight: "100svh",
-        display: "grid",
-        placeItems: "center",
-        padding: "clamp(40px, 8vw, 120px)",
-      }}
-    >
-      <div style={{ maxWidth: 720, textAlign: "center", display: "grid", gap: 24 }}>
-        <div className="eyebrow" style={{ justifySelf: "center" }}>
-          <span className="eyebrow-num">[404]</span> &nbsp; Not found
+    <main className="min-h-[100svh] grid place-items-center bg-bg text-text-primary px-6 md:px-10 py-20">
+      <div className="text-center max-w-2xl flex flex-col gap-6">
+        <div className="flex items-center justify-center gap-3">
+          <span className="block w-8 h-px bg-stroke" aria-hidden />
+          <span className="text-xs text-muted uppercase tracking-[0.3em]">
+            [404] Not found
+          </span>
+          <span className="block w-8 h-px bg-stroke" aria-hidden />
         </div>
-        <h1
-          className="display"
-          style={{ fontSize: "clamp(72px, 14vw, 200px)", lineHeight: 0.9, margin: 0, letterSpacing: "-0.02em" }}
-        >
-          A door that does not open.
+        <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight">
+          A door that does not <span className="font-display italic">open.</span>
         </h1>
-        <p style={{ color: "var(--td-fg-2)", fontSize: 18, maxWidth: 480, margin: "0 auto" }}>
+        <p className="text-base text-muted max-w-md mx-auto text-balance">
           The page you tried to reach is not part of this site. It happens. The way back is below.
         </p>
-        <div style={{ justifySelf: "center", marginTop: 16 }}>
-          <a href="/" className="btn">
-            Return home
-            <span aria-hidden="true">→</span>
+        <div className="mt-2">
+          <a
+            href="/"
+            className="group relative inline-flex items-center text-sm rounded-full"
+          >
+            <span
+              aria-hidden
+              className="absolute -inset-[2px] rounded-full opacity-0 group-hover:opacity-100 accent-gradient-shift transition-opacity duration-300"
+            />
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-text-primary text-bg px-7 py-3.5 group-hover:bg-bg group-hover:text-text-primary transition-colors duration-300">
+              Return home
+              <span aria-hidden>→</span>
+            </span>
           </a>
         </div>
       </div>
