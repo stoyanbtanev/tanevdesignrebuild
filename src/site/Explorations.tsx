@@ -68,12 +68,12 @@ export function Explorations() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[300vh] bg-bg overflow-hidden"
+      className="relative min-h-[300svh] bg-bg overflow-hidden"
     >
       {/* Pinned stage: text + parallax columns travel together */}
       <div
         ref={stageRef}
-        className="h-screen w-full relative overflow-hidden"
+        className="h-svh w-full relative overflow-hidden"
       >
         {/* Parallax columns */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -163,7 +163,7 @@ export function Explorations() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.94, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-              className="max-w-[92vw] max-h-[88vh] object-contain rounded-2xl shadow-2xl"
+              className="max-w-[92vw] max-h-[88svh] object-contain rounded-2xl shadow-2xl"
             />
           </motion.div>
         )}
