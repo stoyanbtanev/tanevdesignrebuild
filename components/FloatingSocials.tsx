@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { site } from "@/data/site";
 
 type FloatingItem = {
-  href: string;
+  href?: string;
   label: string;
   icon: ReactNode;
   external?: boolean;
+  contact?: boolean;
 };
 
 const items: FloatingItem[] = [
@@ -36,7 +35,7 @@ const items: FloatingItem[] = [
     external: true
   },
   {
-    href: `mailto:${site.email}`,
+    contact: true,
     label: "Email",
     icon: <Mail size={20} aria-hidden="true" strokeWidth={1.6} />
   }
@@ -58,20 +57,38 @@ export function FloatingSocials() {
               "--ping-delay": `${index * 700}ms`
             } as CSSProperties;
 
-            const linkProps = item.external
-              ? { target: "_blank", rel: "noopener noreferrer" }
-              : {};
+            if (item.contact) {
+              return (
+                <button
+                  key={item.label}
+                  type="button"
+                  className="floating-cta__btn"
+                  style={style}
+                  aria-label={item.label}
+                  data-contact-trigger
+                  data-cursor="CONTACT"
+                  data-magnetic
+                >
+                  <span className="floating-cta__ping" aria-hidden="true" />
+                  {item.icon}
+                  <span className="floating-cta__label" aria-hidden="true">
+                    {item.label}
+                  </span>
+                </button>
+              );
+            }
 
             return (
               <a
                 key={item.label}
-                href={item.href}
+                href={item.href ?? "#"}
                 className="floating-cta__btn"
                 style={style}
                 aria-label={item.label}
                 data-cursor="OPEN"
                 data-magnetic
-                {...linkProps}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
               >
                 <span className="floating-cta__ping" aria-hidden="true" />
                 {item.icon}
@@ -83,16 +100,17 @@ export function FloatingSocials() {
           })}
         </div>
 
-        <Link
-          href="/contact"
+        <button
+          type="button"
           className="floating-cta__primary"
-          data-cursor="OPEN"
+          data-contact-trigger
+          data-cursor="CONTACT"
           data-magnetic
         >
           <span className="floating-cta__dot" aria-hidden="true" />
           Let&apos;s Talk
           <ArrowUpRight size={14} aria-hidden="true" />
-        </Link>
+        </button>
       </div>
     </aside>
   );

@@ -45,16 +45,15 @@ export const site = {
   person: "Stoyan Tanev",
   location: "Plovdiv, BG",
   timezone: "Europe/Sofia",
-  email: "stoyanbtanev@gmail.com",
-  displayEmail: "STOYANBTANEV@GMAIL.COM",
   url: "https://tanev.design",
   description:
     "Website design, UI/UX, SEO, and fast front-end builds for local businesses in Bulgaria and the EU."
 };
 
+export const contactHref = "#contact";
+
 export const image = {
-  portrait: "/assets/newherowithbackground.png",
-  contact: "/assets/CTA.png",
+  portrait: "/assets/newherowithbackground.png?v=masked-hero-20260429",
   style: {
     websiteDesign: "/assets/mockup.png",
     uiux: "/assets/UIUXDesignService.png",
@@ -258,7 +257,7 @@ export const services: Service[] = [
       "clear trust, brand alignment, and a page visitors can understand quickly"
     ),
     ctaLabel: "PLAN A WEBSITE",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.why
   },
   {
@@ -283,7 +282,7 @@ export const services: Service[] = [
       "less friction, better scanning, and a smoother path from interest to contact"
     ),
     ctaLabel: "DESIGN THE FLOW",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.faq
   },
   {
@@ -308,7 +307,7 @@ export const services: Service[] = [
       "stronger technical foundations, cleaner metadata, and pages search engines can read"
     ),
     ctaLabel: "IMPROVE SEO",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.performance
   },
   {
@@ -333,7 +332,7 @@ export const services: Service[] = [
       "one sharp message, one conversion path, and a fast route from visitor attention to enquiry"
     ),
     ctaLabel: "BUILD A LANDING PAGE",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.uiux
   },
   {
@@ -358,7 +357,7 @@ export const services: Service[] = [
       "faster loading, better Lighthouse signals, and fewer technical distractions for visitors"
     ),
     ctaLabel: "AUDIT PERFORMANCE",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.tools
   },
   {
@@ -383,7 +382,7 @@ export const services: Service[] = [
       "layouts that stay readable, usable, and visually consistent wherever people open them"
     ),
     ctaLabel: "FIX RESPONSIVE DESIGN",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.responsive
   }
 ];
@@ -427,7 +426,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.blogUx, image.style.uiux],
     blocks: blogBlocks("UX mistakes"),
     ctaLabel: "FIX THE FLOW",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.faq
   },
   {
@@ -445,7 +444,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.uiux, image.style.websiteDesign],
     blocks: blogBlocks("User flow"),
     ctaLabel: "MAP A FLOW",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.responsive
   },
   {
@@ -463,7 +462,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.blogSeo, image.style.performance],
     blocks: blogBlocks("SEO basics"),
     ctaLabel: "IMPROVE SEO",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.seo
   },
   {
@@ -481,7 +480,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.landingPage, image.style.businessWebsite],
     blocks: blogBlocks("Landing page vs multi-page"),
     ctaLabel: "CHOOSE THE RIGHT SITE",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.blogLanding
   },
   {
@@ -499,7 +498,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.websiteDesign, image.style.businessWebsite],
     blocks: blogBlocks("Logo basics"),
     ctaLabel: "SHARPEN A BRAND",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.tools
   },
   {
@@ -517,7 +516,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.responsive, image.style.performance],
     blocks: blogBlocks("Clean layout"),
     ctaLabel: "REDESIGN A PAGE",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.websiteDesign
   },
   {
@@ -535,7 +534,7 @@ export const blogs: BlogPost[] = [
     detailImages: [image.style.tools, image.style.uiux],
     blocks: blogBlocks("Grid play"),
     ctaLabel: "EXPLORE A GRID",
-    ctaHref: "/contact",
+    ctaHref: contactHref,
     closingImage: image.style.blogUx
   }
 ];

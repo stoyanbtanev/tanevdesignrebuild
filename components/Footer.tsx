@@ -1,17 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { LayoutGroup, motion } from "framer-motion";
-import { site } from "@/data/site";
 import { HoverSwapText } from "@/components/HoverSwapText";
 import { TextRotate } from "@/components/ui/text-rotate";
+import { SimpleTree } from "@/components/ui/simple-growth-tree";
 
 const socials = [
   ["GH", "https://github.com/stoyantanev"],
-  ["IN", "https://www.linkedin.com/in/stoyan-tanev/"],
-  ["MAIL", `mailto:${site.email}`]
+  ["IN", "https://www.linkedin.com/in/stoyan-tanev/"]
 ] as const;
 
 const rotatingWords = [
@@ -28,38 +24,40 @@ const rotatingWords = [
 export function Footer() {
   return (
     <footer className="site-footer">
+      <SimpleTree />
+
       <div className="footer-opener page-shell">
         <div>
           <div className="eyebrow footer-rotate" role="text">
-            <LayoutGroup>
-              <motion.div layout className="footer-rotate__line">
-                <motion.span layout className="footer-rotate__static">
-                  READY TO BUILD SOMETHING&nbsp;
-                </motion.span>
-                <TextRotate
-                  texts={rotatingWords}
-                  mainClassName="footer-rotate__word"
-                  splitLevelClassName="overflow-hidden"
-                  staggerDuration={0.025}
-                  staggerFrom="last"
-                  rotationInterval={2600}
-                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                />
-                <motion.span layout className="footer-rotate__static">
-                  ?
-                </motion.span>
-              </motion.div>
-            </LayoutGroup>
+            {/* Removed LayoutGroup and layout props to prevent reflow jank
+                on mobile devices during text rotation. The TextRotate component
+                handles its own enter/exit animations via AnimatePresence. */}
+            <div className="footer-rotate__line">
+              <span className="footer-rotate__static">
+                READY TO BUILD SOMETHING&nbsp;
+              </span>
+              <TextRotate
+                texts={rotatingWords}
+                mainClassName="footer-rotate__word"
+                splitLevelClassName="overflow-hidden"
+                staggerDuration={0.025}
+                staggerFrom="last"
+                rotationInterval={2600}
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              />
+              <span className="footer-rotate__static">
+                ?
+              </span>
+            </div>
           </div>
-          <Link href="/contact" className="footer-giant" data-cursor="OPEN">
+          <button type="button" className="footer-giant" data-contact-trigger data-cursor="CONTACT">
             <HoverSwapText>LETSTALK</HoverSwapText>
-          </Link>
+          </button>
         </div>
-        <Image className="spin-mark" src="/assets/icons/star.svg" width={132} height={132} alt="" />
-        <Link className="pill pill--large" href="/contact" data-magnetic data-cursor="OPEN">
+        <button className="pill pill--large" type="button" data-contact-trigger data-magnetic data-cursor="CONTACT">
           LET&apos;S WORK TOGETHER
           <ArrowUpRight size={18} aria-hidden="true" />
-        </Link>
+        </button>
       </div>
 
       <div className="footer-bottom page-shell">
@@ -70,6 +68,9 @@ export function Footer() {
               {label}
             </a>
           ))}
+          <button type="button" data-contact-trigger data-cursor="CONTACT">
+            MAIL
+          </button>
         </nav>
         <a href="#top" data-cursor="OPEN">
           BACK TO TOP

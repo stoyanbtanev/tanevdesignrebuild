@@ -7,6 +7,7 @@ import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
 
 const MARQUEE_PHRASE = "Stoyan Tanev · ";
 const MARQUEE_TEXT = MARQUEE_PHRASE.repeat(8);
+const HERO_IMAGE_SRC = "/assets/mefacemask.svg";
 
 export function PortraitHero() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -37,12 +38,12 @@ export function PortraitHero() {
         <div className="phero__portrait">
           <motion.div className="phero__portrait-inner" style={{ scale, opacity }}>
             <Image
-              src="/assets/newherowithbackground.png"
+              src={HERO_IMAGE_SRC}
               alt="Stoyan Tanev portrait"
               fill
               priority
-              sizes="(max-width: 760px) 100vw, 78vw"
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              sizes="100vw"
+              style={{ objectFit: "contain", objectPosition: "center bottom" }}
               className="phero__portrait-img"
             />
           </motion.div>

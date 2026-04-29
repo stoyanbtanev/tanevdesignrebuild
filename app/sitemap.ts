@@ -3,7 +3,7 @@ import { site } from "@/data/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const routes = ["", "/contact"];
+  const routes = [""];
 
   return routes.map((route) => ({
     url: `${site.url}${route}`,

@@ -72,7 +72,7 @@ export function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a className="pill" href="/contact" data-magnetic data-cursor="OPEN">
+              <a className="pill" href="#contact" data-magnetic data-cursor="OPEN">
                 REQUEST SLOT
               </a>
             </article>

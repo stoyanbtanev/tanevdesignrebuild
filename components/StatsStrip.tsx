@@ -58,10 +58,10 @@ export function StatsStrip() {
       <span className="stat-rule" aria-hidden="true">
         {"//"}
       </span>
-      <a className="stat reveal" href="/contact" data-cursor="OPEN">
+      <div className="stat reveal">
         <Counter target={14} suffix="+" />
         <p>LOCAL BRANDS</p>
-      </a>
+      </div>
       <span className="stat-rule" aria-hidden="true">
         {"//"}
       </span>

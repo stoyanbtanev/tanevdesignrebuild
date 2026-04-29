@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { blogs, faqs, image, services, site } from "@/data/site";
+import { blogs, faqs, image, services } from "@/data/site";
 import type { DetailPage } from "@/data/site";
 import { DetailModal, type DetailKind } from "@/components/DetailModal";
 import { FAQ } from "@/components/FAQ";
@@ -111,10 +110,10 @@ export default function Home() {
               work from first sketch to launch.
             </p>
 
-            <Link className="elite-pill" href="#contact" data-cursor="START">
+            <a className="elite-pill" href="#contact" data-cursor="START">
               Start a project
               <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -231,17 +230,6 @@ export default function Home() {
               </p>
             </button>
           ))}
-        </div>
-      </section>
-
-      <section className="elite-contact page-shell" id="contact">
-        <div className="elite-contact__panel reveal">
-          <p className="elite-kicker">Get in touch</p>
-          <h2>Need a website that is easier to trust, use, and find?</h2>
-          <Link className="elite-pill elite-pill--light" href={`mailto:${site.email}`} data-cursor="MAIL">
-            {site.displayEmail}
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
         </div>
       </section>
 

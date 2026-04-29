@@ -22,9 +22,9 @@ export default function NotFound() {
               Go back home
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <Link className="elite-pill" href="/contact" data-cursor="CONTACT">
+            <a className="elite-pill" href="#contact" data-cursor="CONTACT">
               Contact
-            </Link>
+            </a>
           </div>
         </div>
       </section>

@@ -10,7 +10,7 @@ const nav = [
   ["WORK", "/#work"],
   ["SERVICES", "/#services"],
   ["TOOLS", "/#stack"],
-  ["CONTACT", "/contact"]
+  ["CONTACT", "#contact"]
 ] as const;
 
 function useClock() {
@@ -64,15 +64,15 @@ export function Header() {
           <time className="header-meta" aria-live="polite">
             {time || "--:--"}
           </time>
-          <a className="header-meta header-email" href={`mailto:${site.email}`} data-cursor="OPEN">
+          <button className="header-meta header-email" type="button" data-contact-trigger data-cursor="CONTACT">
             <Mail size={14} aria-hidden="true" />
-            {site.displayEmail}
-          </a>
+            Contact
+          </button>
 
-          <Link className="pill pill--header" href="/contact" data-magnetic data-cursor="OPEN">
+          <button className="pill pill--header" type="button" data-contact-trigger data-magnetic data-cursor="CONTACT">
             LET&apos;S WORK TOGETHER
             <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
+          </button>
 
           <button
             className="menu-button"
@@ -101,16 +101,31 @@ export function Header() {
           <Image src="/assets/icons/star.svg" width={76} height={76} alt="" />
         </div>
         <nav className="mobile-menu__nav" aria-label="Mobile navigation">
-          {nav.map(([label, href], index) => (
-            <Link key={label} href={href} onClick={() => setOpen(false)} style={{ transitionDelay: `${index * 40}ms` }}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              {label}
-            </Link>
-          ))}
+          {nav.map(([label, href], index) =>
+            href === "#contact" ? (
+              <button
+                type="button"
+                key={label}
+                data-contact-trigger
+                onClick={() => setOpen(false)}
+                style={{ transitionDelay: `${index * 40}ms` }}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {label}
+              </button>
+            ) : (
+              <Link key={label} href={href} onClick={() => setOpen(false)} style={{ transitionDelay: `${index * 40}ms` }}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {label}
+              </Link>
+            )
+          )}
         </nav>
         <div className="mobile-menu__footer">
           <p>{site.location}</p>
-          <a href={`mailto:${site.email}`}>{site.displayEmail}</a>
+          <button type="button" data-contact-trigger onClick={() => setOpen(false)}>
+            Start a project
+          </button>
         </div>
       </div>
     </>

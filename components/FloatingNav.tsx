@@ -18,7 +18,8 @@ import {
 import { site } from "@/data/site";
 
 type FloatingNavItem = {
-  href: string;
+  href?: string;
+  contact?: boolean;
   label: string;
   eyebrow: string;
   icon: ReactNode;
@@ -56,7 +57,7 @@ const navItems: FloatingNavItem[] = [
     icon: <BookOpenText size={18} aria-hidden="true" strokeWidth={1.7} />
   },
   {
-    href: "/contact",
+    contact: true,
     label: "Contact",
     eyebrow: "05",
     icon: <BriefcaseBusiness size={18} aria-hidden="true" strokeWidth={1.7} />
@@ -78,7 +79,8 @@ export function FloatingNav() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const isActive = (href: string) => {
+  const isActive = (href?: string) => {
+    if (!href) return false;
     if (href.includes("#")) {
       return false;
     }
@@ -112,10 +114,35 @@ export function FloatingNav() {
         <nav className="float-nav__links" aria-label="Primary navigation">
           {navItems.map((item, index) => {
             const style = { "--nav-delay": `${index * 45}ms` } as CSSProperties;
+            const content = (
+              <>
+                <span className="float-nav__link-icon">{item.icon}</span>
+                <span className="float-nav__link-copy">
+                  <span>{item.eyebrow}</span>
+                  {item.label}
+                </span>
+              </>
+            );
+
+            if (item.contact) {
+              return (
+                <button
+                  type="button"
+                  key={item.label}
+                  className="float-nav__link"
+                  style={style}
+                  data-contact-trigger
+                  data-cursor="CONTACT"
+                  onClick={() => setOpen(false)}
+                >
+                  {content}
+                </button>
+              );
+            }
 
             return (
               <Link
-                href={item.href}
+                href={item.href ?? "/"}
                 key={item.href}
                 className="float-nav__link"
                 style={style}
@@ -123,25 +150,33 @@ export function FloatingNav() {
                 aria-current={isActive(item.href) ? "page" : undefined}
                 onClick={() => setOpen(false)}
               >
-                <span className="float-nav__link-icon">{item.icon}</span>
-                <span className="float-nav__link-copy">
-                  <span>{item.eyebrow}</span>
-                  {item.label}
-                </span>
+                {content}
               </Link>
             );
           })}
         </nav>
 
         <div className="float-nav__dock">
-          <a href={`mailto:${site.email}`} className="float-nav__email" data-cursor="MAIL" onClick={() => setOpen(false)}>
+          <button
+            type="button"
+            className="float-nav__email"
+            data-contact-trigger
+            data-cursor="CONTACT"
+            onClick={() => setOpen(false)}
+          >
             <Mail size={16} aria-hidden="true" strokeWidth={1.8} />
-            <span>{site.displayEmail}</span>
-          </a>
-          <Link href="/contact" className="float-nav__start" data-cursor="START" onClick={() => setOpen(false)}>
+            <span>Contact</span>
+          </button>
+          <button
+            type="button"
+            className="float-nav__start"
+            data-contact-trigger
+            data-cursor="START"
+            onClick={() => setOpen(false)}
+          >
             Start
             <Send size={15} aria-hidden="true" strokeWidth={1.9} />
-          </Link>
+          </button>
         </div>
       </aside>
 

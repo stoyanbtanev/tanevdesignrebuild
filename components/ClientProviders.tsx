@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { ContactModal } from "@/components/ContactModal";
 
 type ClientProvidersProps = {
   children: ReactNode;
@@ -206,7 +207,7 @@ function useLenis() {
       const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href^='#']");
       if (!link || !lenis) return;
       const href = link.getAttribute("href");
-      if (!href || href === "#") return;
+      if (!href || href === "#" || href === "#contact" || event.defaultPrevented) return;
       event.preventDefault();
       lenis.scrollTo(href, { offset: -80, duration: 1.2 });
     };
@@ -438,7 +439,7 @@ function useSpotlight(pathname: string) {
   useEffect(() => {
     if (prefersReducedMotion() || window.innerWidth < 900) return;
 
-    const selector = ".service-card, .pricing-card, .blog-card, .service-index-card, .work-row figure, .testimonial-stage, .contact-form";
+    const selector = ".service-card, .pricing-card, .blog-card, .service-index-card, .work-row figure, .testimonial-stage";
     const targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
     const cleanups: Array<() => void> = [];
 
@@ -694,6 +695,7 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       <CustomCursor />
       <div key={pathname} className="route-panel" aria-hidden="true" />
       {children}
+      <ContactModal />
     </>
   );
 }

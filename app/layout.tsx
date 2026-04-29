@@ -93,7 +93,7 @@ const jsonLd = [
     description:
       "Independent web designer and developer based in Plovdiv, Bulgaria. Custom website design, UI/UX, SEO, and front-end development for founders and small businesses across the EU.",
     url: site.url,
-    image: `${site.url}/assets/newhero.png`,
+    image: `${site.url}/assets/newherowithbackground.png?v=masked-hero-20260429`,
     priceRange: "€€",
     founder: { "@type": "Person", "@id": `${site.url}/#stoyan` },
     areaServed: ["Bulgaria", "European Union", "Worldwide"],
@@ -117,7 +117,6 @@ const jsonLd = [
     jobTitle: "Independent Web Designer & Developer",
     url: site.url,
     image: `${site.url}/assets/newherowithbackground.png`,
-    email: `mailto:${site.email}`,
     worksFor: { "@id": `${site.url}/#business` },
     address: {
       "@type": "PostalAddress",
