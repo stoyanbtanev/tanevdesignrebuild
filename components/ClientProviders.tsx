@@ -317,7 +317,8 @@ function useScrollScrubVideo(pathname: string) {
 function useRevealObserver(pathname: string) {
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
-    const timeout = window.setTimeout(() => {
+
+    const init = () => {
       const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
       if (!nodes.length) return;
 
@@ -325,6 +326,14 @@ function useRevealObserver(pathname: string) {
         nodes.forEach((node) => node.classList.add("is-visible"));
         return;
       }
+
+      // Anything already in or near the viewport reveals instantly so it does
+      // not land mid-scroll on fast flicks.
+      const viewportH = window.innerHeight;
+      nodes.forEach((node) => {
+        const rect = node.getBoundingClientRect();
+        if (rect.top < viewportH * 1.1) node.classList.add("is-visible");
+      });
 
       observer = new IntersectionObserver(
         (entries) => {
@@ -334,17 +343,26 @@ function useRevealObserver(pathname: string) {
             observer?.unobserve(entry.target);
           });
         },
-        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+        // Fire as soon as the element peeks in, AND look ahead 25% past the
+        // viewport bottom so the reveal animation has time to complete before
+        // the user actually scrolls onto it. Threshold 0 = first pixel triggers.
+        { threshold: 0, rootMargin: "0px 0px 25% 0px" }
       );
 
       nodes.forEach((node, index) => {
-        node.style.setProperty("--reveal-delay", `${Math.min(index % 8, 7) * 60}ms`);
+        if (node.classList.contains("is-visible")) return;
+        node.style.setProperty("--reveal-delay", `${Math.min(index % 6, 5) * 40}ms`);
         observer?.observe(node);
       });
-    }, 450);
+    };
+
+    // Run on the next frame so reveal nodes from initial render are picked up
+    // immediately — no 450ms blank window where above-fold content sits at
+    // opacity 0 waiting to animate in.
+    const raf = requestAnimationFrame(init);
 
     return () => {
-      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
       observer?.disconnect();
     };
   }, [pathname]);

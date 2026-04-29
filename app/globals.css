@@ -444,19 +444,30 @@ button.header-email {
 
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(28px);
   clip-path: inset(0 0 100% 0);
   transition:
-    opacity 800ms var(--ease-expo),
-    transform 800ms var(--ease-expo),
-    clip-path 800ms var(--ease-expo);
+    opacity 620ms var(--ease-expo),
+    transform 620ms var(--ease-expo),
+    clip-path 620ms var(--ease-expo);
   transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
 }
 
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
   clip-path: inset(0 0 0 0);
+}
+
+@media (max-width: 760px) {
+  .reveal {
+    transform: translateY(18px);
+    clip-path: none;
+    transition:
+      opacity 480ms var(--ease-out),
+      transform 480ms var(--ease-out);
+  }
 }
 
 .spin-mark {

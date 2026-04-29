@@ -114,12 +114,12 @@ export function ParallaxImage({
   const ref = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "center start"]
+    offset: ["start end", "center end"]
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.35], [0, 1]);
   const clipPath = useTransform(
     scrollYProgress,
-    [0, 0.7],
+    [0, 0.4],
     ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]
   );
 
