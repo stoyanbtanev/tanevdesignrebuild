@@ -3403,26 +3403,42 @@ body:has(.elite-page) main {
 }
 
 .elite-marquee {
+  position: relative;
+  display: grid;
+  gap: 8px;
   overflow: hidden;
+  padding-block: 14px;
   border-block: 1px solid var(--elite-line);
-  background: #030303;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+    #020303;
 }
 
-.elite-marquee div {
-  width: max-content;
-  display: flex;
-  animation: eliteMarquee 34s linear infinite;
+.elite-marquee::before,
+.elite-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: min(18vw, 220px);
+  pointer-events: none;
 }
 
-.elite-marquee span {
-  padding: 18px 28px;
-  color: var(--elite-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
+.elite-marquee::before {
+  left: 0;
+  background: linear-gradient(90deg, #020303 0%, rgba(2, 3, 3, 0) 100%);
+}
+
+.elite-marquee::after {
+  right: 0;
+  background: linear-gradient(270deg, #020303 0%, rgba(2, 3, 3, 0) 100%);
+}
+
+.elite-marquee__row {
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .elite-section {
@@ -4522,7 +4538,7 @@ body:has(.elite-page) main {
 
 @media (prefers-reduced-motion: reduce) {
   .elite-hero__portrait,
-  .elite-marquee div {
+  .elite-marquee [class*="animate-marquee"] {
     animation: none !important;
   }
 

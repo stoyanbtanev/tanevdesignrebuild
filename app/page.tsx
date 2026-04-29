@@ -9,6 +9,7 @@ import type { DetailPage } from "@/data/site";
 import { DetailModal, type DetailKind } from "@/components/DetailModal";
 import { FAQ } from "@/components/FAQ";
 import { PortraitHero } from "@/components/PortraitHero";
+import { CapabilityMarquee } from "@/components/CapabilityMarquee";
 import {
   ParallaxFeatureSection,
   ParallaxImage,
@@ -47,16 +48,6 @@ const reasons: ParallaxFeatureItem[] = [
     reverse: false
   }
 ];
-
-const capabilities = [
-  "Website design",
-  "UI/UX design",
-  "SEO optimization",
-  "Landing pages",
-  "Business websites",
-  "Performance optimization",
-  "Responsive design"
-] as const;
 
 const technicalStack = [
   {
@@ -100,16 +91,7 @@ export default function Home() {
     <div className="elite-home">
       <PortraitHero />
 
-      <section className="elite-marquee" aria-label="Core capabilities">
-        <div>
-          {capabilities.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-          {capabilities.map((item) => (
-            <span key={`${item}-duplicate`}>{item}</span>
-          ))}
-        </div>
-      </section>
+      <CapabilityMarquee />
 
       <section className="elite-section page-shell elite-intro" id="work">
         <div className="elite-intro__eyebrow reveal">

@@ -19,6 +19,20 @@ const config: Config = {
         body: ["var(--font-body)"],
         display: ["var(--font-display)"]
       },
+      keyframes: {
+        "ui-marquee": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" }
+        },
+        "ui-marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" }
+        }
+      },
+      animation: {
+        marquee: "ui-marquee var(--duration) infinite linear",
+        "marquee-vertical": "ui-marquee-vertical var(--duration) linear infinite"
+      },
       maxWidth: {
         page: "var(--max-w)"
       }
