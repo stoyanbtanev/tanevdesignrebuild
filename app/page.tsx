@@ -221,7 +221,16 @@ export default function Home() {
               data-cursor="READ"
               onClick={() => openDetail("Blog", post)}
             >
-              <Image src={post.cover} width={800} height={520} alt={`${post.title} article cover`} />
+              <Image
+                src={post.cover}
+                width={800}
+                height={520}
+                alt={`${post.title} article cover`}
+                sizes="(max-width: 760px) 92vw, (max-width: 1200px) 33vw, 400px"
+                loading="eager"
+                fetchPriority="high"
+                className="elite-blog-card__img"
+              />
               <span>{new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
               <h3>{post.subtitle}</h3>
               <p>

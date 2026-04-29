@@ -5043,12 +5043,12 @@ body:has(.elite-page) main {
 
 @media (max-width: 760px) {
   .phero-pin {
-    height: 100svh;
+    height: var(--app-height, 100svh);
   }
 
   .phero {
     position: relative;
-    height: 100svh;
+    height: var(--app-height, 100svh);
   }
 
   .phero__nav {
@@ -5132,7 +5132,7 @@ body:has(.elite-page) main {
 
 @media (max-width: 480px) {
   .phero {
-    height: 100svh;
+    height: var(--app-height, 100svh);
   }
 
   .phero__portrait-img {

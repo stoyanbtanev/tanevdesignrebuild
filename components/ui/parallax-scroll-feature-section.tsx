@@ -77,6 +77,9 @@ function ParallaxRow({ item, index }: RowProps) {
           alt={item.imageAlt ?? item.title}
           width={640}
           height={640}
+          sizes="(max-width: 768px) 70vw, 384px"
+          loading="eager"
+          fetchPriority="high"
           className="size-72 md:size-80 lg:size-96 object-cover"
         />
       </motion.div>
@@ -131,6 +134,9 @@ export function ParallaxImage({
         alt={alt}
         width={width}
         height={height}
+        sizes="(max-width: 768px) 92vw, (max-width: 1280px) 70vw, 1200px"
+        loading="eager"
+        fetchPriority="high"
         className={cn(
           "w-full h-auto object-cover",
           rounded ? "rounded-[var(--radius)]" : "",
