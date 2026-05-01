@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, DM_Mono } from "next/font/google";
+import { Inter, DM_Mono, Space_Grotesk } from "next/font/google";
 import "@/app/globals.css";
 import { ClientProviders } from "@/components/ClientProviders";
 import { FloatingNav } from "@/components/FloatingNav";
@@ -19,6 +19,12 @@ const dmMono = DM_Mono({
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-dm-mono"
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-grotesk"
 });
 
 export const viewport: Viewport = {
@@ -152,7 +158,7 @@ const jsonLd = [
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${dmMono.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -163,7 +169,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div id="root">
           <ClientProviders>
             <FloatingNav />
-            <main>{children}</main>
+            <main id="main-content" role="main">
+              {children}
+            </main>
             <Footer />
           </ClientProviders>
         </div>

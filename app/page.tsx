@@ -87,33 +87,73 @@ export default function Home() {
   const closeDetail = () => setActive(null);
 
   return (
-    <div className="elite-home">
+    <div className="elite-home" style={{ position: "relative", zIndex: 1 }}>
       <PortraitHero />
 
       <CapabilityMarquee />
 
       <section className="elite-section page-shell elite-intro" id="work">
+        <div className="elite-intro__rail" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+
         <div className="elite-intro__eyebrow reveal">
           <span>{"// Intro"}</span>
           <span>Designer &amp; developer for early-stage brands</span>
         </div>
 
         <div className="elite-intro__layout">
-          <h2 className="elite-intro__headline" data-split-intro>
-            I’m a <span className="elite-intro__accent">versatile designer who partners with founders</span> to ship
-            real websites — focused on clear interfaces, sharp decisions, and fast execution.
-          </h2>
+          <div className="elite-intro__copy">
+            <h2 className="elite-intro__headline" data-split-intro>
+              I’m a <span className="elite-intro__accent">versatile designer</span> who partners with{" "}
+              <span className="elite-intro__accent">founders</span> to ship real websites — focused on clear interfaces,
+              sharp decisions, and fast execution.
+            </h2>
 
-          <div className="elite-intro__panel reveal">
-            <p>
-              Branding, marketing sites, or product UI — I cover the whole build end-to-end and deliver clean, effective
-              work from first sketch to launch.
-            </p>
+            <div className="elite-intro__panel reveal">
+              <span className="elite-intro__mark" aria-hidden="true">
+                <ArrowUpRight size={16} />
+              </span>
+              <div>
+                <p>
+                  Branding, marketing sites, or product UI — I cover the whole build end-to-end and deliver clean,
+                  effective work from first sketch to launch.
+                </p>
 
-            <a className="elite-pill" href="#contact" data-cursor="START">
-              Start a project
-              <ArrowRight size={14} aria-hidden="true" />
-            </a>
+                <div className="elite-intro__actions">
+                  <a className="elite-pill" href="#contact" data-cursor="START">
+                    Start a project
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </a>
+                  <a className="elite-intro__text-link" href="#services">
+                    View services
+                    <span aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="elite-intro__visual reveal" aria-hidden="true">
+            <div className="elite-intro__visual-frame">
+              <div className="elite-intro__mockups">
+                <div className="elite-intro__mockup elite-intro__mockup--one">
+                  <Image src="/assets/mok1.png" alt="" width={1200} height={820} draggable={false} />
+                </div>
+                <div className="elite-intro__mockup elite-intro__mockup--two">
+                  <Image src="/assets/mok2.png" alt="" width={1200} height={820} draggable={false} />
+                </div>
+                <div className="elite-intro__mockup elite-intro__mockup--three">
+                  <Image src="/assets/mok3.png" alt="" width={1200} height={820} draggable={false} />
+                </div>
+                <div className="elite-intro__mockup elite-intro__mockup--four">
+                  <Image src="/assets/mok4.png" alt="" width={1200} height={820} draggable={false} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

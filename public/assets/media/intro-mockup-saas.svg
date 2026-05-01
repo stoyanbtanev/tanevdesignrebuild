@@ -1,0 +1,62 @@
+<svg width="900" height="620" viewBox="0 0 900 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="96" y1="58" x2="794" y2="551" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101419"/>
+      <stop offset="0.52" stop-color="#070909"/>
+      <stop offset="1" stop-color="#120706"/>
+    </linearGradient>
+    <linearGradient id="card" x1="145" y1="143" x2="755" y2="461" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8f8f3" stop-opacity="0.13"/>
+      <stop offset="0.5" stop-color="#f8f8f3" stop-opacity="0.045"/>
+      <stop offset="1" stop-color="#ff4a31" stop-opacity="0.1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(704 165) rotate(127) scale(319 249)">
+      <stop stop-color="#ff4a31" stop-opacity="0.64"/>
+      <stop offset="0.35" stop-color="#ff4a31" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ff4a31" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="27" y="21" width="846" height="580" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="28"/>
+      <feGaussianBlur stdDeviation="32"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.52 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="900" height="620" rx="42" fill="#050505"/>
+  <g filter="url(#shadow)">
+    <rect x="78" y="58" width="744" height="490" rx="34" fill="url(#bg)"/>
+    <rect x="78.5" y="58.5" width="743" height="489" rx="33.5" stroke="#F8F8F3" stroke-opacity="0.12"/>
+    <rect x="78" y="58" width="744" height="490" rx="34" fill="url(#glow)"/>
+  </g>
+  <rect x="113" y="93" width="132" height="422" rx="26" fill="#050606" fill-opacity="0.82" stroke="#f8f8f3" stroke-opacity="0.09"/>
+  <circle cx="149" cy="132" r="15" fill="#ff4a31"/>
+  <rect x="176" y="124" width="40" height="8" rx="4" fill="#f8f8f3" fill-opacity="0.52"/>
+  <rect x="137" y="183" width="80" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.23"/>
+  <rect x="137" y="225" width="66" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.13"/>
+  <rect x="137" y="267" width="76" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.13"/>
+  <rect x="137" y="309" width="55" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.13"/>
+  <rect x="137" y="458" width="72" height="34" rx="17" fill="#ff4a31" fill-opacity="0.9"/>
+  <text x="279" y="127" fill="#f8f8f3" fill-opacity="0.58" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="900" letter-spacing="4">NOVAOS DASHBOARD</text>
+  <text x="279" y="176" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="900" letter-spacing="-2.4">Growth command center</text>
+  <rect x="279" y="206" width="189" height="9" rx="4.5" fill="#f8f8f3" fill-opacity="0.18"/>
+  <rect x="279" y="229" width="132" height="9" rx="4.5" fill="#f8f8f3" fill-opacity="0.11"/>
+  <g fill="url(#card)" stroke="#f8f8f3" stroke-opacity="0.1">
+    <rect x="279" y="270" width="154" height="104" rx="22"/>
+    <rect x="456" y="270" width="154" height="104" rx="22"/>
+    <rect x="633" y="270" width="154" height="104" rx="22"/>
+  </g>
+  <text x="302" y="314" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="900">84%</text>
+  <text x="479" y="314" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="900">12k</text>
+  <text x="656" y="314" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="900">4.9</text>
+  <rect x="302" y="339" width="80" height="7" rx="3.5" fill="#ff4a31" fill-opacity="0.78"/>
+  <rect x="479" y="339" width="92" height="7" rx="3.5" fill="#ff4a31" fill-opacity="0.54"/>
+  <rect x="656" y="339" width="65" height="7" rx="3.5" fill="#ff4a31" fill-opacity="0.38"/>
+  <rect x="279" y="404" width="508" height="88" rx="24" fill="#080909" fill-opacity="0.82" stroke="#f8f8f3" stroke-opacity="0.1"/>
+  <path d="M313 459C356 421 389 455 429 429C471 403 506 453 549 421C586 394 631 421 665 398C704 371 730 402 753 385" stroke="#ff4a31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M313 472C365 454 399 468 436 452C490 429 537 469 586 444C634 420 690 456 753 423" stroke="#f8f8f3" stroke-opacity="0.22" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="665" cy="398" r="7" fill="#ff4a31"/>
+</svg>

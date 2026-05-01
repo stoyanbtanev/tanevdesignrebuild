@@ -40,7 +40,6 @@ function ParallaxRow({ item, index }: RowProps) {
     [0, 0.7],
     ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]
   );
-  const translateY = useTransform(scrollYProgress, [0, 1], [-50, 0]);
 
   const reverse = Boolean(item.reverse ?? index % 2 === 1);
 
@@ -52,21 +51,24 @@ function ParallaxRow({ item, index }: RowProps) {
         reverse ? "md:flex-row-reverse" : ""
       )}
     >
-      <motion.div style={{ y: translateY }} className="max-w-sm">
+      <div className="max-w-sm">
         {item.eyebrow ? (
           <p className="elite-kicker mb-4">{item.eyebrow}</p>
         ) : null}
-        <div className="text-4xl md:text-6xl leading-[1.05] font-[var(--font-display)]">
+        <div
+          className="text-4xl md:text-6xl leading-[1.05] font-[var(--font-display)]"
+          data-split-why="title"
+        >
           {item.title}
         </div>
-        <motion.p
-          style={{ y: translateY }}
+        <p
           className="text-white/70 mt-6 md:mt-10 text-base"
+          data-split-why="copy"
         >
           {item.description}
-        </motion.p>
+        </p>
         {item.cta ? <div className="mt-8">{item.cta}</div> : null}
-      </motion.div>
+      </div>
 
       <motion.div
         style={{ opacity, clipPath }}

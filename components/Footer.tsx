@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import { HoverSwapText } from "@/components/HoverSwapText";
 import { TextRotate } from "@/components/ui/text-rotate";
-import { SimpleTree } from "@/components/ui/simple-growth-tree";
+import { GalaxyFooterBg } from "@/components/ui/galaxy-footer-bg";
 
 const socials = [
   ["GH", "https://github.com/stoyantanev"],
@@ -23,10 +22,10 @@ const rotatingWords = [
 
 export function Footer() {
   return (
-    <footer className="site-footer">
-      <SimpleTree />
+    <footer id="contact" className="site-footer" style={{ background: "transparent" }}>
+      <GalaxyFooterBg />
 
-      <div className="footer-opener page-shell">
+      <div className="footer-opener page-shell" style={{ zIndex: 2 }}>
         <div>
           <div className="eyebrow footer-rotate" role="text">
             {/* Removed LayoutGroup and layout props to prevent reflow jank
@@ -54,14 +53,11 @@ export function Footer() {
             <HoverSwapText>LETSTALK</HoverSwapText>
           </button>
         </div>
-        <button className="pill pill--large" type="button" data-contact-trigger data-magnetic data-cursor="CONTACT">
-          LET&apos;S WORK TOGETHER
-          <ArrowUpRight size={18} aria-hidden="true" />
-        </button>
       </div>
 
-      <div className="footer-bottom page-shell">
+      <div className="footer-bottom page-shell" style={{ zIndex: 2 }}>
         <p>&copy;2026 TANEV.DESIGN</p>
+        <a className="footer-back-to-top" href="#top" data-cursor="OPEN">BACK TO TOP</a>
         <nav aria-label="Social links">
           {socials.map(([label, href]) => (
             <a href={href} key={label} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" data-cursor="OPEN">
@@ -72,9 +68,6 @@ export function Footer() {
             MAIL
           </button>
         </nav>
-        <a href="#top" data-cursor="OPEN">
-          BACK TO TOP
-        </a>
       </div>
     </footer>
   );

@@ -1,0 +1,68 @@
+<svg width="900" height="620" viewBox="0 0 900 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="98" y1="60" x2="797" y2="548" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#21110f"/>
+      <stop offset="0.48" stop-color="#080808"/>
+      <stop offset="1" stop-color="#10120d"/>
+    </linearGradient>
+    <linearGradient id="cream" x1="156" y1="132" x2="379" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff5df" stop-opacity="0.94"/>
+      <stop offset="1" stop-color="#c7bdaa" stop-opacity="0.78"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(505 304) rotate(90) scale(267 340)">
+      <stop stop-color="#ff4a31" stop-opacity="0.48"/>
+      <stop offset="0.44" stop-color="#ff4a31" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ff4a31" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="product" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(286 262) rotate(78) scale(152 112)">
+      <stop stop-color="#ff7f65"/>
+      <stop offset="0.42" stop-color="#ff4a31"/>
+      <stop offset="1" stop-color="#4f1510"/>
+    </radialGradient>
+    <filter id="shadow" x="27" y="21" width="846" height="580" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="28"/>
+      <feGaussianBlur stdDeviation="32"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.52 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="900" height="620" rx="42" fill="#050505"/>
+  <g filter="url(#shadow)">
+    <rect x="78" y="58" width="744" height="490" rx="34" fill="url(#bg)"/>
+    <rect x="78.5" y="58.5" width="743" height="489" rx="33.5" stroke="#F8F8F3" stroke-opacity="0.12"/>
+    <rect x="78" y="58" width="744" height="490" rx="34" fill="url(#glow)"/>
+  </g>
+  <circle cx="121" cy="98" r="7" fill="#ff4a31"/>
+  <circle cx="146" cy="98" r="7" fill="#f8f8f3" fill-opacity="0.17"/>
+  <circle cx="171" cy="98" r="7" fill="#f8f8f3" fill-opacity="0.11"/>
+  <rect x="579" y="89" width="62" height="8" rx="4" fill="#f8f8f3" fill-opacity="0.28"/>
+  <rect x="666" y="89" width="62" height="8" rx="4" fill="#f8f8f3" fill-opacity="0.18"/>
+  <rect x="755" y="80" width="36" height="26" rx="13" fill="#f8f8f3" fill-opacity="0.12"/>
+  <text x="116" y="152" fill="#f8f8f3" fill-opacity="0.55" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="900" letter-spacing="5">VANTA GOODS</text>
+  <rect x="119" y="184" width="340" height="310" rx="32" fill="url(#cream)" stroke="#f8f8f3" stroke-opacity="0.12"/>
+  <ellipse cx="287" cy="282" rx="92" ry="116" fill="url(#product)"/>
+  <path d="M235 221C269 196 318 197 350 224" stroke="#280a07" stroke-opacity="0.38" stroke-width="7" stroke-linecap="round"/>
+  <path d="M215 356C260 397 326 398 367 354" stroke="#280a07" stroke-opacity="0.22" stroke-width="9" stroke-linecap="round"/>
+  <rect x="161" y="433" width="122" height="14" rx="7" fill="#201815" fill-opacity="0.25"/>
+  <rect x="161" y="459" width="78" height="12" rx="6" fill="#201815" fill-opacity="0.16"/>
+  <text x="505" y="221" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="900" letter-spacing="-4.2">Premium</text>
+  <text x="505" y="287" fill="#f8f8f3" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="900" letter-spacing="-4.2">marketplace</text>
+  <rect x="510" y="319" width="206" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.2"/>
+  <rect x="510" y="345" width="148" height="10" rx="5" fill="#f8f8f3" fill-opacity="0.12"/>
+  <rect x="510" y="392" width="132" height="44" rx="22" fill="#ff4a31"/>
+  <text x="543" y="420" fill="#0b0504" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="900" letter-spacing="2">SHOP NOW</text>
+  <rect x="665" y="392" width="96" height="44" rx="22" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.12"/>
+  <text x="695" y="420" fill="#f8f8f3" fill-opacity="0.72" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="900">01</text>
+  <g opacity="0.9">
+    <rect x="505" y="463" width="86" height="70" rx="18" fill="#f8f8f3" fill-opacity="0.08" stroke="#f8f8f3" stroke-opacity="0.11"/>
+    <rect x="610" y="463" width="86" height="70" rx="18" fill="#f8f8f3" fill-opacity="0.06" stroke="#f8f8f3" stroke-opacity="0.09"/>
+    <rect x="715" y="463" width="86" height="70" rx="18" fill="#f8f8f3" fill-opacity="0.05" stroke="#f8f8f3" stroke-opacity="0.08"/>
+    <circle cx="548" cy="492" r="15" fill="#ff4a31" fill-opacity="0.72"/>
+    <circle cx="653" cy="492" r="15" fill="#f8f8f3" fill-opacity="0.18"/>
+    <circle cx="758" cy="492" r="15" fill="#ff4a31" fill-opacity="0.28"/>
+  </g>
+</svg>

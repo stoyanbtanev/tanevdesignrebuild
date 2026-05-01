@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { ContactModal } from "@/components/ContactModal";
 
@@ -54,34 +53,71 @@ function useAppHeightLock() {
   }, []);
 }
 
+const HERO_PRELOAD_SRC = "/assets/mefacemask.svg";
+const PRELOADER_EXIT_MS = 1880;
+
 function Preloader() {
   const [hidden, setHidden] = useState(false);
+  const [portraitReady, setPortraitReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
+    let fallback = 0;
+    let exitDelay = 0;
+    let exitFrame = 0;
+    let exitCommitFrame = 0;
 
     const finish = () => {
       if (cancelled) return;
+      window.clearTimeout(fallback);
       document.documentElement.classList.add("is-loaded");
-      window.setTimeout(() => setHidden(true), 760);
+      window.setTimeout(() => setHidden(true), prefersReducedMotion() ? 120 : PRELOADER_EXIT_MS);
     };
 
-    const loadReady =
-      document.readyState === "complete"
+    const scheduleFinish = () => {
+      exitFrame = window.requestAnimationFrame(() => {
+        exitCommitFrame = window.requestAnimationFrame(() => {
+          exitDelay = window.setTimeout(finish, 80);
+        });
+      });
+    };
+
+    const domReady =
+      document.readyState !== "loading"
         ? Promise.resolve()
-        : new Promise<void>((resolve) => window.addEventListener("load", () => resolve(), { once: true }));
+        : new Promise<void>((resolve) => document.addEventListener("DOMContentLoaded", () => resolve(), { once: true }));
 
     const fontReady = "fonts" in document ? document.fonts.ready : Promise.resolve();
-    Promise.all([loadReady, fontReady]).then(() => window.setTimeout(finish, 220));
+    const portraitReady = new Promise<void>((resolve) => {
+      const img = new window.Image();
+      img.onload = () => {
+        if (!cancelled) setPortraitReady(true);
+        if ("decode" in img) {
+          img.decode().then(resolve).catch(resolve);
+          return;
+        }
+        resolve();
+      };
+      img.onerror = () => resolve();
+      img.src = HERO_PRELOAD_SRC;
+    });
 
-    // Hard fallback: never let the preloader sit longer than 2.5s,
-    // even if window.load or font loading hangs (e.g. broken assets,
+    Promise.all([domReady, fontReady, portraitReady]).then(scheduleFinish);
+
+    // Hard fallback: never let the preloader sit longer than 3.5s,
+    // even if DOM/font/image readiness hangs (e.g. broken assets,
     // Turbopack HMR quirks, blocked third-party fetches).
-    const fallback = window.setTimeout(finish, 2500);
+    fallback = window.setTimeout(() => {
+      setPortraitReady(true);
+      finish();
+    }, 3500);
 
     return () => {
       cancelled = true;
       window.clearTimeout(fallback);
+      window.clearTimeout(exitDelay);
+      window.cancelAnimationFrame(exitFrame);
+      window.cancelAnimationFrame(exitCommitFrame);
     };
   }, []);
 
@@ -89,7 +125,17 @@ function Preloader() {
 
   return (
     <div className="preloader" aria-hidden="true">
-      <Image src="/assets/icons/star.svg" width={42} height={42} alt="" />
+      <div className="preloader__stage">
+        {/* eslint-disable-next-line @next/next/no-img-element -- The preloader needs a plain decoded image before Next hydrates its image wrapper. */}
+        <img
+          src={HERO_PRELOAD_SRC}
+          alt=""
+          className={`preloader__portrait ${portraitReady ? "is-ready" : ""}`}
+          draggable={false}
+        />
+      </div>
+      <div className="preloader__sheen" />
+      <div className="preloader__scan" />
     </div>
   );
 }
@@ -511,17 +557,19 @@ function useIntroSplitHighlight(pathname: string) {
         wordsClass: "split-word",
         aria: "auto"
       });
-      const section = node.closest<HTMLElement>(".elite-intro") ?? node;
-
-      gsap.set(split.words, { color: "rgba(248, 248, 243, 0.18)" });
+      gsap.set(split.words, {
+        color: (_index, target) => (target.closest(".elite-intro__accent") ? "rgba(255, 74, 49, 0.18)" : "rgba(248, 248, 243, 0.18)"),
+        opacity: 0.18
+      });
       const tween = gsap.to(split.words, {
         color: (_index, target) => (target.closest(".elite-intro__accent") ? "#ff4a31" : "#f8f8f3"),
-        ease: "power2.out",
-        stagger: { each: 0.4, from: "start" },
+        opacity: 1,
+        ease: "none",
+        stagger: { each: 0.1, from: "start" },
         scrollTrigger: {
-          trigger: section,
-          start: "top 70%",
-          end: "bottom 60%",
+          trigger: node,
+          start: "top 85%",
+          end: "bottom 55%",
           scrub: 0.6,
           invalidateOnRefresh: true
         }
@@ -533,6 +581,71 @@ function useIntroSplitHighlight(pathname: string) {
         tween.scrollTrigger?.kill();
         tween.kill();
         split.revert();
+      };
+    });
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, [pathname]);
+}
+
+function useWhySplitReveal(pathname: string) {
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>("[data-split-why]"));
+    if (nodes.length === 0) return;
+
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+
+    Promise.all([import("gsap"), import("gsap/ScrollTrigger"), import("gsap/SplitText")]).then(([gsapModule, scrollTriggerModule, splitTextModule]) => {
+      if (cancelled) return;
+      const gsap = gsapModule.gsap;
+      const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+      const SplitText = splitTextModule.SplitText;
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+
+      const triggers: ScrollTrigger[] = [];
+      const splits: { revert: () => void }[] = [];
+
+      nodes.forEach((node) => {
+        const isTitle = node.dataset.splitWhy === "title";
+        const split = new SplitText(node, {
+          type: "lines,words",
+          linesClass: "split-why-line",
+          wordsClass: "split-why-word",
+          aria: "auto"
+        });
+        splits.push(split);
+
+        gsap.set(split.words, {
+          color: isTitle ? "rgba(248, 248, 243, 0.18)" : "rgba(248, 248, 243, 0.16)",
+          opacity: 0.18
+        });
+
+        const tween = gsap.to(split.words, {
+          color: isTitle ? "#f8f8f3" : "rgba(248, 248, 243, 0.85)",
+          opacity: 1,
+          ease: "none",
+          stagger: { each: isTitle ? 0.08 : 0.04, from: "start" },
+          scrollTrigger: {
+            trigger: node,
+            start: "top 85%",
+            end: "bottom 55%",
+            scrub: 0.6,
+            invalidateOnRefresh: true
+          }
+        });
+
+        if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+      });
+
+      ScrollTrigger.refresh();
+
+      cleanup = () => {
+        triggers.forEach((t) => t.kill());
+        splits.forEach((s) => s.revert());
       };
     });
 
@@ -705,6 +818,7 @@ export function ClientProviders({ children }: ClientProvidersProps) {
   useParallax(pathname);
   useSpotlight(pathname);
   useIntroSplitHighlight(pathname);
+  useWhySplitReveal(pathname);
   useScrollScenes(pathname);
 
   return (
